@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import JsonLd from '@/components/JsonLd';
+import JsonLd from '../components/JsonLd';
 
 export default function Home() {
   const [email, setEmail] = useState('');
