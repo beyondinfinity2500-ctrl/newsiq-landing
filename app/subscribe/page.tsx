@@ -20,8 +20,8 @@ export default function SubscribePage() {
         </div>
 
         <div className="mx-auto mt-10 grid max-w-6xl gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {PRODUCTS.map((product, index) => <article className={`relative flex flex-col rounded-xl border p-6 sm:p-7 ${index === 2 ? "border-primary/70 bg-primary/[0.06] shadow-[0_20px_70px_hsl(var(--primary)/.12)]" : "border-border bg-card/70"}`} key={product.id}>
-            {index === 2 && <span className="absolute right-4 top-4 rounded-full bg-primary px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-primary-foreground">Best value</span>}
+          {PRODUCTS.map((product, index) => <article className={`pricing-card relative flex flex-col rounded-xl border p-6 sm:p-7 ${index === 2 ? "pricing-card-featured border-primary/70 bg-primary/[0.06] shadow-[0_20px_70px_hsl(var(--primary)/.12)]" : "border-border bg-card/70"}`} key={product.id}>
+            {index === 2 && <span className="pricing-badge absolute right-4 top-4 rounded-full bg-primary px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-primary-foreground">Recommended</span>}
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">{product.interval === "year" ? "Annual" : "Monthly"}</p>
             <h2 className="mt-4 text-xl font-semibold tracking-[-0.03em]">{product.name}</h2>
             <p className="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">{product.description}</p>
@@ -30,6 +30,7 @@ export default function SubscribePage() {
             <div className="mt-8"><CheckoutButton productId={product.id} label="Subscribe securely" /></div>
           </article>)}
         </div>
+        <div className="payment-strip mx-auto mt-10 max-w-2xl rounded-xl border border-border/80 bg-card/60 p-4 text-center" aria-label="Accepted payment methods"><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Secure checkout</p><p className="mt-1 text-xs text-muted-foreground">Pay securely with</p><div className="mt-4 flex flex-wrap items-center justify-center gap-3"><a href="/subscribe" className="checkout-brand checkout-paypal" aria-label="Subscribe with PayPal">PayPal</a><span className="text-xs text-muted-foreground">or</span><a href="/subscribe" className="checkout-brand checkout-mastercard" aria-label="Subscribe with Mastercard">mastercard</a></div></div>
         <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-5 text-muted-foreground">Secure recurring billing is handled by Stripe. Cancel your subscription through the customer billing portal.</p>
       </section>
       <SiteFooter />

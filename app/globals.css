@@ -55,6 +55,17 @@
 .payment-stripe { color: #635bff; font-weight: 700; }
 .payment-apple { color: #111827; }
 .payment-google { color: #4285f4; }
+.pricing-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.pricing-card:hover, .pricing-card:focus-within { transform: translateY(-4px); border-color: hsl(var(--primary) / .55); box-shadow: 0 16px 42px hsl(var(--foreground) / .08); }
+.pricing-card-featured { background-image: linear-gradient(145deg, hsl(var(--primary) / .12), transparent 48%); }
+.pricing-badge { box-shadow: 0 0 0 3px hsl(var(--primary) / .12), 0 8px 22px hsl(var(--primary) / .2); }
+.payment-strip { background-image: linear-gradient(110deg, hsl(var(--card)), hsl(var(--primary) / .06), hsl(var(--card))); background-size: 220% 100%; animation: payment-shimmer 8s ease-in-out infinite; }
+.checkout-brand { display: inline-flex; min-width: 116px; align-items: center; justify-content: center; border-radius: 7px; padding: 10px 16px; background: hsl(var(--background)); font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -.06em; transition: transform .2s ease, box-shadow .2s ease; }
+.checkout-brand:hover, .checkout-brand:focus-visible { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 22px hsl(var(--foreground) / .12); }
+.checkout-paypal { color: #173f8a; }
+.checkout-mastercard { color: #eb001b; letter-spacing: -.08em; }
+@keyframes payment-shimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .pricing-card, .checkout-brand, .payment-strip { animation: none; transition: none; } }
 .market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
 .market-symbol-bitcoin > span:first-child { color: hsl(var(--primary)); }
 .field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
