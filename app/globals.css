@@ -47,7 +47,8 @@
 .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 .market-symbol { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 5px 10px; font-size: 10px; color: hsl(var(--muted-foreground)); }
 .market-symbol > span:first-child { color: hsl(var(--foreground)); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; font-weight: 700; }
-.payment-mark { display: inline-flex; min-height: 30px; align-items: center; border: 1px solid hsl(var(--border)); border-radius: 5px; padding: 5px 9px; color: hsl(var(--foreground)); font-size: 10px; font-weight: 700; letter-spacing: .02em; }
+.payment-mark { display: inline-flex; min-height: 34px; min-width: 58px; align-items: center; justify-content: center; border: 1px solid hsl(var(--border)); border-radius: 5px; background: hsl(var(--foreground)); padding: 6px 9px; }
+.payment-mark img { display: block; max-height: 19px; max-width: 58px; width: auto; object-fit: contain; }
 .market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
 .market-symbol-bitcoin > span:first-child { color: hsl(var(--primary)); }
 .field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
