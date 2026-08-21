@@ -17,7 +17,7 @@ export default function JsonLd() {
         name: 'NEWSiQ | Global News & Financial Intelligence',
         url: 'https://newsiq.top',
         publisher: { '@id': 'https://newsiq.top/#organization' },
-        inLanguage: ['en', 'fa'],
+        inLanguage: 'en',
       },
       {
         '@type': 'NewsArticle',
