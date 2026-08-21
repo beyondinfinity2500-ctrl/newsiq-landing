@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://newsiq.top'),
   alternates: {
     canonical: '/',
+    languages: {
+      'en-US': '/',
+      'fa-IR': '/?lang=fa',
+    },
+    types: {
+      'application/rss+xml': 'https://newsiq.top/feed.xml',
+    },
   },
   title: {
     default: 'NEWSiQ | Global News & Financial Intelligence',

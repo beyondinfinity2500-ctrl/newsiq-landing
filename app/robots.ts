@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/admin/'],
       },
     ],
-    sitemap: 'https://newsiq.top/sitemap.xml',
+    sitemap: ['https://newsiq.top/sitemap.xml', 'https://newsiq.top/news-sitemap.xml'],
   };
 }

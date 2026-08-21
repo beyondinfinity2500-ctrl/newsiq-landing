@@ -48,7 +48,13 @@
 .market-symbol { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 5px 10px; font-size: 10px; color: hsl(var(--muted-foreground)); }
 .market-symbol > span:first-child { color: hsl(var(--foreground)); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; font-weight: 700; }
 .payment-mark { display: inline-flex; min-height: 34px; min-width: 58px; align-items: center; justify-content: center; border: 1px solid hsl(var(--border)); border-radius: 5px; background: hsl(var(--foreground)); padding: 6px 9px; }
-.payment-mark img { display: block; max-height: 19px; max-width: 58px; width: auto; object-fit: contain; }
+.payment-mark { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; }
+.payment-paypal { color: #173f8a; }
+.payment-visa { color: #1a4aa1; font-style: italic; }
+.payment-mastercard { color: #eb001b; letter-spacing: -.06em; }
+.payment-stripe { color: #635bff; font-weight: 700; }
+.payment-apple { color: #111827; }
+.payment-google { color: #4285f4; }
 .market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
 .market-symbol-bitcoin > span:first-child { color: hsl(var(--primary)); }
 .field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
