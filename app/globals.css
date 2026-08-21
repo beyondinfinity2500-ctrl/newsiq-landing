@@ -53,6 +53,9 @@
 .field-input::placeholder { color: hsl(var(--muted-foreground) / .7); }
 .menu-button { display: grid; width: 36px; height: 36px; place-content: center; gap: 4px; border: 1px solid hsl(var(--border)); border-radius: 6px; color: hsl(var(--foreground)); }
 .menu-button span { display: block; width: 15px; height: 1px; background: currentColor; }
+.live-toggle { display: inline-flex; align-items: center; gap: 7px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 6px 9px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); transition: border-color .2s ease, color .2s ease; }
+.live-toggle:hover { border-color: hsl(var(--primary)); color: hsl(var(--foreground)); }
+.live-dot-off { background: hsl(var(--muted-foreground)); box-shadow: none; }
 .menu-button:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
