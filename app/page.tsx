@@ -3,103 +3,75 @@
 import { FormEvent, useState } from 'react'
 import JsonLd from '../components/JsonLd'
 
-const signalCards = [
-  { label: 'Global coverage', value: '142', suffix: 'markets', tone: 'blue' },
-  { label: 'Signal latency', value: '< 90', suffix: 'seconds', tone: 'cyan' },
-  { label: 'Source validation', value: '98.4', suffix: '% confidence', tone: 'green' },
+type NewsItem = {
+  id: string
+  region: string
+  category: string
+  time: string
+  source: string
+  localLanguage: string
+  localLabel: string
+  headline: string
+  localHeadline: string
+  summary: string
+  impact: string
+  confidence: string
+  locked?: boolean
+  breaking?: boolean
+}
+
+const newsItems: NewsItem[] = [
+  {
+    id: '001', region: 'Indonesia', category: 'Disaster', time: '2 min ago', source: 'Local emergency agencies', localLanguage: 'Bahasa Indonesia', localLabel: 'Bahasa Indonesia', breaking: true,
+    headline: 'Strong earthquake strikes eastern Indonesia; tsunami monitoring begins', localHeadline: 'Gempa kuat melanda Indonesia bagian timur; pemantauan tsunami dimulai',
+    summary: 'A powerful offshore earthquake has triggered emergency assessments across nearby islands. Officials are checking coastal infrastructure and transport routes.', impact: 'Potential disruption to regional logistics, nickel supply routes and insurance risk', confidence: '91.6%'
+  },
+  {
+    id: '002', region: 'Japan', category: 'Markets', time: '8 min ago', source: 'Tokyo exchange feeds', localLanguage: '日本語', localLabel: '日本語',
+    headline: 'Japan stocks open lower as exporters absorb a stronger yen', localHeadline: '円高を受け、輸出関連株が下落して日本株は安く始まる',
+    summary: 'The Nikkei opened under pressure as currency moves reshape expectations for exporters and domestic demand.', impact: 'Read the full cross-market analysis covering FX, Asia equities and global risk appetite', confidence: '88.4%', locked: true
+  },
+  {
+    id: '003', region: 'Europe', category: 'Geopolitics', time: '16 min ago', source: 'Verified regional desks', localLanguage: 'Deutsch', localLabel: 'Deutsch',
+    headline: 'European officials call for an emergency review of energy corridors', localHeadline: 'Europäische Vertreter fordern eine Notfallprüfung der Energiekorridore',
+    summary: 'A coordinated review could affect near-term energy procurement and shipping assumptions across several member states.', impact: 'Read the full analysis to unlock commodity, shipping and currency implications', confidence: '84.9%', locked: true
+  },
 ]
 
-const topics = ['Geopolitics', 'Commodities', 'Currencies', 'Technology']
+const navItems = ['Live feed', 'Markets', 'Geopolitics', 'Technology']
+
+function LockIcon() { return <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> }
+function GlobeIcon() { return <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.5 5.5 3.5 9S14.4 18.5 12 21c-2.4-2.5-3.5-5.5-3.5-9S9.6 5.5 12 3Z"/></svg> }
 
 export default function Home() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (email.trim()) setSubmitted(true)
-  }
+  function handleSubmit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); if (email.trim()) setSubmitted(true) }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground">
       <JsonLd />
       <div className="page-grid" aria-hidden="true" />
-
-      <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between border-b border-border/70 px-5 py-5 lg:px-8">
-        <a href="#top" className="flex items-center gap-3" aria-label="NEWSiQ home">
-          <span className="brand-mark">N</span>
-          <span className="font-mono text-sm font-bold tracking-[0.28em] text-foreground">NEWS<span className="text-primary">iQ</span></span>
-        </a>
-        <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex" aria-label="Main navigation">
-          <a href="#signals" className="transition-colors hover:text-foreground">Signals</a>
-          <a href="#method" className="transition-colors hover:text-foreground">Our method</a>
-          <a href="#access" className="transition-colors hover:text-foreground">Early access</a>
-        </nav>
-        <button className="rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary hover:text-primary">EN / فارسی</button>
+      <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8">
+          <a href="#top" className="flex items-center gap-3" aria-label="NEWSiQ home"><span className="brand-mark">N</span><span className="font-mono text-sm font-bold tracking-[0.28em]">NEWS<span className="text-primary">iQ</span></span></a>
+          <div className="hidden items-center gap-2 md:flex"><span className="live-dot"/><span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Live global feed</span></div>
+          <div className="flex items-center gap-3"><span className="hidden text-xs text-muted-foreground sm:inline">English / Local</span><a href="#subscribe" className="rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-transform hover:-translate-y-0.5">Unlock analysis</a></div>
+        </div>
       </header>
 
-      <section id="top" className="relative z-10 mx-auto grid max-w-7xl gap-12 px-5 pb-20 pt-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:px-8 lg:pb-28 lg:pt-28">
-        <div>
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
-            <span className="live-dot" /> Intelligence before consensus
-          </div>
-          <h1 className="max-w-4xl text-balance text-5xl font-semibold leading-[1.02] tracking-[-0.06em] text-foreground sm:text-7xl lg:text-8xl">
-            See the signal<br /><span className="text-primary">before the noise.</span>
-          </h1>
-          <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-muted-foreground sm:text-xl">
-            NEWSiQ turns the world&apos;s smallest, earliest stories into clear signals for the markets that matter.
-          </p>
-          <form id="access" onSubmit={handleSubmit} className="mt-9 flex max-w-lg flex-col gap-3 sm:flex-row">
-            <label className="sr-only" htmlFor="email">Professional email address</label>
-            <input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Your professional email" className="h-13 flex-1 rounded-lg border border-border bg-card px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary" />
-            <button type="submit" className="h-13 rounded-lg bg-primary px-6 text-sm font-bold text-primary-foreground transition-transform hover:-translate-y-0.5">{submitted ? 'You are on the list' : 'Request early access'}</button>
-          </form>
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Private beta · No noise · Built for curious minds</p>
-        </div>
+      <div id="top" className="relative z-10 mx-auto grid max-w-7xl lg:grid-cols-[210px_minmax(0,680px)_280px]">
+        <aside className="hidden border-r border-border/70 px-4 py-8 lg:block"><nav className="sticky top-24 space-y-2" aria-label="News categories">{navItems.map((item, index) => <a key={item} href={index === 0 ? '#feed' : `#${item.toLowerCase()}`} className={`flex items-center gap-3 rounded-md px-3 py-3 text-sm ${index === 0 ? 'bg-secondary font-semibold text-foreground' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}><span className={`h-1.5 w-1.5 rounded-full ${index === 0 ? 'bg-primary' : 'bg-border'}`}/>{item}</a>)}</nav></aside>
 
-        <div className="signal-panel relative mx-auto w-full max-w-md" aria-label="Live intelligence preview">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Live intelligence / 09:42 UTC</span>
-            <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary))]" />
-          </div>
-          <div className="p-5">
-            <div className="mb-5 flex items-start justify-between gap-4">
-              <div><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">Signal 00481</p><h2 className="mt-2 text-xl font-semibold leading-snug">Copper supply routes shift as regional tensions rise</h2></div>
-              <span className="rounded border border-amber-400/30 bg-amber-400/10 px-2 py-1 font-mono text-[10px] text-amber-300">HIGH</span>
-            </div>
-            <p className="text-sm leading-6 text-muted-foreground">Early reports indicate a potential disruption across three key transit corridors. Our models are monitoring downstream pressure on industrial metals and FX.</p>
-            <div className="mt-6 flex flex-wrap gap-2">{topics.slice(0, 3).map((topic) => <span key={topic} className="rounded-full bg-secondary px-3 py-1 font-mono text-[10px] text-muted-foreground">#{topic}</span>)}</div>
-            <div className="mt-7 grid grid-cols-2 gap-3 border-t border-border pt-5"><div><p className="font-mono text-[10px] uppercase text-muted-foreground">Potential impact</p><p className="mt-1 text-sm font-semibold text-amber-300">Mixed / short term</p></div><div><p className="font-mono text-[10px] uppercase text-muted-foreground">Confidence</p><p className="mt-1 text-sm font-semibold text-primary">87.2%</p></div></div>
-          </div>
-        </div>
-      </section>
+        <section id="feed" className="min-w-0 border-x border-border/70">
+          <div className="border-b border-border/70 px-5 py-7 sm:px-8"><div className="flex items-center justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Short news / 24h</p><h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">What is moving now</h1></div><span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 font-mono text-[10px] text-primary">142 regions</span></div><p className="mt-3 max-w-lg text-sm leading-6 text-muted-foreground">Fast, verified updates from around the world. Every story is published by the NEWSiQ editorial team.</p></div>
+          <div className="divide-y divide-border/70">{newsItems.map((news) => <article key={news.id} className="px-5 py-7 transition-colors hover:bg-card/40 sm:px-8"><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"><span className="text-primary">{news.region}</span><span>·</span><span>{news.category}</span><span>·</span><span>{news.time}</span>{news.breaking && <span className="ml-auto rounded bg-red-400/10 px-2 py-1 text-red-300">Breaking</span>}</div><h2 className="mt-4 text-xl font-semibold leading-snug tracking-[-0.02em]">{news.headline}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{news.summary}</p><div className="mt-5 rounded-md border border-border bg-secondary/60 p-4"><div className="flex items-center justify-between gap-3"><span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-primary"><GlobeIcon/> {news.localLabel}</span><span className="text-[10px] text-muted-foreground">Local version</span></div><p className="mt-3 text-sm font-medium leading-6 text-foreground/90">{news.localHeadline}</p></div><div className={`mt-5 rounded-md border p-4 ${news.locked ? 'border-primary/30 bg-primary/[0.06]' : 'border-border bg-card/50'}`}><div className="flex items-center justify-between gap-4"><span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">AI market impact</span><span className="font-mono text-[10px] text-muted-foreground">Confidence {news.confidence}</span></div><p className={`mt-3 text-sm leading-6 ${news.locked ? 'text-muted-foreground blur-[3px] select-none' : 'text-foreground/85'}`}>{news.impact}</p>{news.locked && <a href="#subscribe" className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline"><LockIcon/> Subscribe to unlock full analysis</a>}</div><div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground"><span>Source: {news.source}</span><button className="rounded px-2 py-1 hover:bg-secondary hover:text-foreground" aria-label={`Save ${news.headline}`}>Save</button></div></article>)}</div>
+        </section>
 
-      <section id="signals" className="relative z-10 mx-auto max-w-7xl border-t border-border/70 px-5 py-12 lg:px-8">
-        <div className="grid gap-4 sm:grid-cols-3">{signalCards.map((card) => <div key={card.label} className="stat-card"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{card.label}</p><p className={`mt-3 text-4xl font-semibold tracking-[-0.05em] ${card.tone === 'blue' ? 'text-blue' : card.tone === 'cyan' ? 'text-cyan' : 'text-green'}`}>{card.value}<span className="ml-2 text-sm font-normal tracking-normal text-muted-foreground">{card.suffix}</span></p></div>)}</div>
-      </section>
+        <aside className="hidden border-l border-border/70 px-5 py-8 xl:block"><div className="sticky top-24 space-y-5"><div className="rounded-md border border-border bg-card/70 p-5"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">Admin publishing</p><h2 className="mt-3 text-lg font-semibold">Only verified editors post</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">No open posting. Every short news update is reviewed and published by the NEWSiQ team.</p><button className="mt-5 w-full rounded-md border border-border px-3 py-2 text-xs font-semibold text-muted-foreground" disabled>Admin access only</button></div><div id="subscribe" className="rounded-md border border-primary/30 bg-primary/[0.07] p-5"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">Pro intelligence</p><h2 className="mt-3 text-lg font-semibold">Go beyond the headline</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Unlock complete AI impact analysis, market links and historical context.</p><form onSubmit={handleSubmit} className="mt-5 space-y-3"><label className="sr-only" htmlFor="subscribe-email">Email address</label><input id="subscribe-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Your email address" className="h-10 w-full rounded-md border border-border bg-background px-3 text-xs outline-none focus:border-primary"/><button className="h-10 w-full rounded-md bg-primary text-xs font-bold text-primary-foreground">{submitted ? 'You are on the list' : 'Join the waitlist'}</button></form></div><p className="text-[10px] leading-5 text-muted-foreground">AI analysis is informational only and is not financial advice.</p></div></aside>
+      </div>
 
-      <section id="method" className="relative z-10 mx-auto grid max-w-7xl gap-10 border-t border-border/70 px-5 py-16 lg:grid-cols-[0.7fr_1.3fr] lg:px-8 lg:py-24">
-        <div><p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary">The NEWSiQ method</p><h2 className="mt-4 max-w-md text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">The world moves in micro-signals.</h2></div>
-        <div className="grid gap-4 sm:grid-cols-3"><article className="method-card"><span className="font-mono text-xs text-primary">01</span><h3 className="mt-10 font-semibold">Detect</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Find the small stories forming before they become headlines.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">02</span><h3 className="mt-10 font-semibold">Contextualize</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Connect events to countries, entities, assets and history.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">03</span><h3 className="mt-10 font-semibold">Understand</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">See what may matter next—without the noise or advice.</p></article></div>
-      </section>
-
-      <footer className="relative z-10 mx-auto max-w-7xl border-t border-border px-5 py-8 text-xs text-muted-foreground lg:px-8">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-mono tracking-[0.15em]">NEWSiQ.TOP</span>
-          <span>Independent intelligence for a moving world · © 2026</span>
-        </div>
-        <div className="mt-7 flex flex-col gap-3 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Payment methods</span>
-          <div className="flex flex-wrap items-center gap-2" aria-label="Accepted payment methods">
-            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/paypal/default.svg" alt="PayPal" /></span>
-            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/visa/default.svg" alt="Visa" /></span>
-            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/mastercard/default.svg" alt="Mastercard" /></span>
-            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/apple-pay/default.svg" alt="Apple Pay" /></span>
-            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/google-pay/default.svg" alt="Google Pay" /></span>
-          </div>
-        </div>
-      </footer>
+      <footer className="relative z-10 mx-auto max-w-7xl border-t border-border px-5 py-8 text-xs text-muted-foreground lg:px-8"><div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"><span className="font-mono tracking-[0.15em]">NEWSiQ.TOP</span><span>Independent intelligence for a moving world · © 2026</span></div><div className="mt-7 flex flex-col gap-3 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between"><span className="font-mono text-[10px] uppercase tracking-[0.16em]">Payment methods</span><div className="flex flex-wrap items-center gap-2" aria-label="Accepted payment methods"><span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/paypal/default.svg" alt="PayPal"/></span><span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/visa/default.svg" alt="Visa"/></span><span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/mastercard/default.svg" alt="Mastercard"/></span><span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/apple-pay/default.svg" alt="Apple Pay"/></span><span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/google-pay/default.svg" alt="Google Pay"/></span></div></div></footer>
     </main>
   )
 }
-
