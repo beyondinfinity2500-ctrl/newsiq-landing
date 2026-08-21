@@ -83,7 +83,22 @@ export default function Home() {
         <div className="grid gap-4 sm:grid-cols-3"><article className="method-card"><span className="font-mono text-xs text-primary">01</span><h3 className="mt-10 font-semibold">Detect</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Find the small stories forming before they become headlines.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">02</span><h3 className="mt-10 font-semibold">Contextualize</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Connect events to countries, entities, assets and history.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">03</span><h3 className="mt-10 font-semibold">Understand</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">See what may matter next—without the noise or advice.</p></article></div>
       </section>
 
-      <footer className="relative z-10 mx-auto flex max-w-7xl flex-col gap-3 border-t border-border px-5 py-7 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8"><span className="font-mono tracking-[0.15em]">NEWSiQ.TOP</span><span>Independent intelligence for a moving world · © 2026</span></footer>
+      <footer className="relative z-10 mx-auto max-w-7xl border-t border-border px-5 py-8 text-xs text-muted-foreground lg:px-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-mono tracking-[0.15em]">NEWSiQ.TOP</span>
+          <span>Independent intelligence for a moving world · © 2026</span>
+        </div>
+        <div className="mt-7 flex flex-col gap-3 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Payment methods</span>
+          <div className="flex flex-wrap items-center gap-2" aria-label="Accepted payment methods">
+            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/paypal/default.svg" alt="PayPal" /></span>
+            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/visa/default.svg" alt="Visa" /></span>
+            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/mastercard/default.svg" alt="Mastercard" /></span>
+            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/apple-pay/default.svg" alt="Apple Pay" /></span>
+            <span className="payment-mark"><img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/google-pay/default.svg" alt="Google Pay" /></span>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

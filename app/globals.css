@@ -43,5 +43,7 @@
 .method-card:hover { border-color: hsl(var(--primary) / .6); transform: translateY(-3px); }
 .h-13 { height: 3.25rem; }
 .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.payment-mark { display: grid; height: 32px; min-width: 52px; place-items: center; border: 1px solid hsl(var(--border)); border-radius: 5px; background: hsl(var(--foreground) / .96); padding: 6px 9px; }
+.payment-mark img { display: block; max-height: 17px; max-width: 48px; width: auto; object-fit: contain; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
