@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { NiqMascot } from '../brand/NiqMascot'
 import { newsCategories } from '../../lib/news/types'
 
 export function SiteHeader({ admin = false }: { admin?: boolean }) {
@@ -17,7 +18,7 @@ export function SiteHeader({ admin = false }: { admin?: boolean }) {
     <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3.5 lg:px-8">
         <a href="https://newsiq.top" title="Global news intelligence" className="flex shrink-0 items-center gap-3" aria-label="Global news intelligence — NEWSiQ home">
-          <span className="brand-mark">N</span><span className="font-mono text-sm font-bold tracking-[0.28em]">NEWS<span className="text-primary">iQ</span></span>
+          <NiqMascot size={32} /><span className="font-mono text-sm font-bold tracking-[0.28em]">NEWS<span className="text-primary">iQ</span></span>
         </a>
         {!admin && <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation"><a href="/about" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</a>{newsCategories.map((item) => item === 'Markets' ? <span key="markets" className="inline-flex items-center gap-1"><button type="button" onClick={() => setLive((value) => !value)} className="live-toggle" aria-pressed={live} aria-label={`${live ? 'Disable' : 'Enable'} live market data`}><span className={`live-dot ${live ? '' : 'live-dot-off'}`} />{live ? 'Live' : 'Paused'}</button><a href="/markets" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</a></span> : <a key={item} href="#feed" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">{item}</a>)}<a href="/terms" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</a>
         </nav>}
