@@ -2,16 +2,24 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'NEWSiQ | Global News & Deep Financial Intelligence',
-  description: 'AI-driven market impact analysis and real-time global news foresight before it hits mainstream markets.',
-  metadataBase: new URL('https://www.newsiq.top'),
+  description: 'Short global news, financial market signals, and AI-assisted impact analysis across equities, currencies, commodities, energy, and crypto.',
+  keywords: ['global news', 'financial markets', 'market impact analysis', 'AI news intelligence', 'short news', 'commodities', 'crypto markets', 'gold', 'oil', 'equities'],
+  applicationName: 'NEWSiQ',
+  authors: [{ name: 'NEWSiQ' }],
+  creator: 'NEWSiQ',
+  publisher: 'NEWSiQ',
+  category: 'news',
+  metadataBase: new URL('https://newsiq.top'),
   alternates: {
     canonical: '/',
   },
+  title: {
+    default: 'NEWSiQ | Global News & Financial Intelligence',
+    template: '%s | NEWSiQ',
+  },
   openGraph: {
-    title: 'NEWSiQ | Global News & Deep Financial Intelligence',
     description: 'Real-time global micro-news analysis powered by advanced AI.',
-    url: 'https://www.newsiq.top',
+    url: 'https://newsiq.top',
     siteName: 'NEWSiQ',
     images: [
       {
