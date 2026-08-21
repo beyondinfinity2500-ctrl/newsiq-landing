@@ -3,9 +3,95 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    background-color: #020617;
-    color: #f8fafc;
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  :root {
+    --background: 222 32% 7%;
+    --foreground: 210 24% 96%;
+    --card: 222 29% 10%;
+    --card-foreground: 210 24% 96%;
+    --primary: 187 88% 48%;
+    --primary-foreground: 222 40% 8%;
+    --secondary: 221 24% 14%;
+    --muted-foreground: 215 16% 62%;
+    --border: 219 20% 20%;
+    --radius: 0.5rem;
   }
+  * { border-color: hsl(var(--border)); }
+  html { background: hsl(var(--background)); scroll-behavior: smooth; }
+  body { background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: Arial, sans-serif; }
 }
+
+@layer utilities {
+  .bg-background { background-color: hsl(var(--background)); }
+  .text-foreground { color: hsl(var(--foreground)); }
+  .bg-card { background-color: hsl(var(--card)); }
+  .bg-secondary { background-color: hsl(var(--secondary)); }
+  .text-primary { color: hsl(var(--primary)); }
+  .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+  .border-border { border-color: hsl(var(--border)); }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+  .text-blue { color: #60a5fa; }
+  .text-cyan { color: #22d3ee; }
+  .text-green { color: #4ade80; }
+}
+
+.page-grid { position: fixed; inset: 0; pointer-events: none; opacity: .24; background-image: linear-gradient(hsl(var(--border) / .35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .35) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
+.brand-mark { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 6px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-family: monospace; font-size: 14px; font-weight: 900; }
+.niq-mascot { position: relative; flex: 0 0 auto; filter: drop-shadow(0 5px 8px hsl(var(--primary) / .16)); animation: niq-float 4s ease-in-out infinite; }
+.niq-antenna { position: absolute; left: 50%; top: 0; width: 2px; height: 9px; background: hsl(var(--muted-foreground)); transform: translateX(-50%); }
+.niq-antenna::before { position: absolute; top: -4px; left: 50%; width: 6px; height: 6px; border-radius: 999px; background: hsl(var(--primary)); box-shadow: 0 0 8px hsl(var(--primary)); content: ''; transform: translateX(-50%); }
+.niq-face { position: absolute; inset: 8px 1px 8px; display: flex; align-items: center; justify-content: center; gap: 4px; border: 2px solid hsl(var(--foreground) / .88); border-radius: 13px; background: hsl(var(--card)); }
+.niq-eye { position: relative; display: block; width: 9px; height: 11px; border-radius: 50%; background: hsl(var(--foreground)); transform: rotate(-3deg); }
+.niq-eye-right { transform: rotate(3deg); }
+.niq-eye i { position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; border-radius: 999px; background: hsl(var(--primary-foreground)); }
+.niq-cheek { position: absolute; right: 5px; bottom: 4px; width: 3px; height: 3px; border-radius: 999px; background: hsl(var(--primary)); opacity: .8; }
+.niq-chest { position: absolute; bottom: 0; left: 50%; display: grid; width: 15px; height: 9px; place-items: center; border: 1px solid hsl(var(--primary)); border-radius: 3px; color: hsl(var(--primary)); font: 700 7px ui-monospace, monospace; transform: translateX(-50%); }
+@keyframes niq-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.live-dot { width: 6px; height: 6px; border-radius: 999px; background: hsl(var(--primary)); box-shadow: 0 0 10px hsl(var(--primary)); }
+.signal-panel { overflow: hidden; border: 1px solid hsl(var(--border)); border-radius: 10px; background: linear-gradient(145deg, hsl(var(--card) / .98), hsl(222 28% 8% / .88)); box-shadow: 0 25px 80px hsl(222 80% 3% / .45); }
+
+@media (max-width: 640px) { .page-grid { opacity: .12; background-size: 44px 44px; } }
+.stat-card, .method-card { border: 1px solid hsl(var(--border)); border-radius: 8px; background: hsl(var(--card) / .7); padding: 20px; }
+.method-card { min-height: 200px; transition: border-color .2s ease, transform .2s ease; }
+.method-card:hover { border-color: hsl(var(--primary) / .6); transform: translateY(-3px); }
+.h-13 { height: 3.25rem; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.market-symbol { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 5px 10px; font-size: 10px; color: hsl(var(--muted-foreground)); }
+.market-symbol > span:first-child { color: hsl(var(--foreground)); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; font-weight: 700; }
+.payment-mark { display: inline-flex; min-height: 34px; min-width: 58px; align-items: center; justify-content: center; border: 1px solid hsl(var(--border)); border-radius: 5px; background: hsl(var(--foreground)); padding: 6px 9px; }
+.payment-mark { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; }
+.payment-paypal { color: #173f8a; }
+.payment-visa { color: #1a4aa1; font-style: italic; }
+.payment-mastercard { color: #eb001b; letter-spacing: -.06em; }
+.payment-stripe { color: #635bff; font-weight: 700; }
+.payment-apple { color: #111827; }
+.payment-google { color: #4285f4; }
+.pricing-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.pricing-card:hover, .pricing-card:focus-within { transform: translateY(-4px); border-color: hsl(var(--primary) / .55); box-shadow: 0 16px 42px hsl(var(--foreground) / .08); }
+.pricing-card-featured { background-image: linear-gradient(145deg, hsl(var(--primary) / .12), transparent 48%); }
+.pricing-badge { box-shadow: 0 0 0 3px hsl(var(--primary) / .12), 0 8px 22px hsl(var(--primary) / .2); }
+.pricing-card-annual { isolation: isolate; }
+.pricing-card-annual .pricing-ribbon { position: absolute; top: 19px; right: -34px; z-index: 1; width: 142px; transform: rotate(45deg); background: hsl(42 96% 56%); color: hsl(222 40% 8%); padding: 6px 0; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 9px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 7px 18px hsl(42 96% 56% / .3); }
+.pricing-card-annual .text-primary { color: hsl(42 96% 56%); }
+.payment-strip { background-image: linear-gradient(110deg, hsl(var(--card)), hsl(var(--primary) / .06), hsl(var(--card))); background-size: 220% 100%; animation: payment-shimmer 8s ease-in-out infinite; }
+.checkout-brand { display: inline-flex; min-width: 116px; align-items: center; justify-content: center; border-radius: 7px; padding: 10px 16px; background: hsl(var(--background)); font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -.06em; transition: transform .2s ease, box-shadow .2s ease; }
+.checkout-brand:hover, .checkout-brand:focus-visible { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 22px hsl(var(--foreground) / .12); }
+.checkout-paypal { color: #173f8a; }
+.checkout-visa { color: #1a4aa1; font-style: italic; }
+.checkout-mastercard { color: #eb001b; letter-spacing: -.08em; }
+.checkout-stripe { color: #635bff; letter-spacing: -.03em; }
+@keyframes payment-shimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .pricing-card, .checkout-brand, .payment-strip { animation: none; transition: none; } }
+.market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
+.market-symbol-bitcoin > span:first-child { color: hsl(var(--primary)); }
+.field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.field-input { width: 100%; border: 1px solid hsl(var(--border)); border-radius: 6px; background: hsl(var(--background)); padding: 11px 12px; color: hsl(var(--foreground)); font-size: 13px; outline: none; transition: border-color .2s ease, box-shadow .2s ease; }
+.field-input:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px hsl(var(--primary) / .12); }
+.field-input::placeholder { color: hsl(var(--muted-foreground) / .7); }
+.menu-button { display: grid; width: 36px; height: 36px; place-content: center; gap: 4px; border: 1px solid hsl(var(--border)); border-radius: 6px; color: hsl(var(--foreground)); }
+.menu-button span { display: block; width: 15px; height: 1px; background: currentColor; }
+.live-toggle { display: inline-flex; align-items: center; gap: 7px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 6px 9px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); transition: border-color .2s ease, color .2s ease; }
+.live-toggle:hover { border-color: hsl(var(--primary)); color: hsl(var(--foreground)); }
+.live-dot-off { background: hsl(var(--muted-foreground)); box-shadow: none; }
+.menu-button:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
