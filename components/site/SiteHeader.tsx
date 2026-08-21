@@ -15,7 +15,7 @@ export function SiteHeader({ admin = false }: { admin?: boolean }) {
   }, [])
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-background shadow-[0_8px_24px_hsl(var(--background)/.45)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3.5 lg:px-8">
         <a href="/" title="Global news intelligence" className="flex shrink-0 items-center gap-3" aria-label="Global news intelligence — NEWSiQ home">
           <NiqMascot size={32} /><span className="font-mono text-sm font-bold tracking-[0.28em]">NEWS<span className="text-primary">iQ</span></span>
