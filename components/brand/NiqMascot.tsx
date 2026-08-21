@@ -1,5 +1,3 @@
-'use client'
-
 export function NiqMascot({ size = 52, className = '' }: { size?: number; className?: string }) {
   return (
     <div className={`niq-mascot ${className}`} style={{ width: size, height: size }} role="img" aria-label="Niq, the friendly NEWSiQ intelligence companion">
