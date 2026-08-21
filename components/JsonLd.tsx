@@ -23,6 +23,7 @@ export default function JsonLd() {
         '@type': 'NewsArticle',
         '@id': 'https://newsiq.top/#hormuz-briefing',
         headline: 'Strait of Hormuz remains closed as tensions rise alongside diplomatic efforts',
+        alternativeHeadline: 'تنگه هرمز کماکان بسته است؛ با وجود افزایش تنش‌ها و تلاش‌های دیپلماتیک',
         description: 'Context analysis of the Strait of Hormuz closure and potential effects across energy, precious metals, bitcoin, equities, currencies, and grains.',
         datePublished: '2026-08-21T00:00:00.000Z',
         dateModified: '2026-08-21T00:00:00.000Z',
