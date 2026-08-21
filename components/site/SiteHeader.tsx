@@ -19,7 +19,7 @@ export function SiteHeader({ admin = false }: { admin?: boolean }) {
           <span className="brand-mark">N</span><span className="font-mono text-sm font-bold tracking-[0.28em]">NEWS<span className="text-primary">iQ</span></span>
         </a>
         {!admin && <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-          {newsCategories.map((item) => <a key={item} href="#feed" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">{item}</a>)}<a href="/about" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</a><a href="/terms" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</a>
+          {newsCategories.map((item) => <a key={item} href={item === 'Markets' ? '/markets' : '#feed'} className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">{item}</a>)}<a href="/about" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</a><a href="/terms" className="rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</a>
         </nav>}
         <div className="flex items-center gap-2">
           <span className="hidden items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground lg:flex"><span className="live-dot" />Live global feed</span>
@@ -28,7 +28,7 @@ export function SiteHeader({ admin = false }: { admin?: boolean }) {
         </div>
       </div>
       {open && <nav id="mobile-navigation" className="border-t border-border/70 px-4 py-3 md:hidden" aria-label="Mobile navigation">
-        <div className="grid gap-1">{(admin ? ['Back to live feed'] : [...newsCategories, 'About', 'Terms', 'Subscribe']).map((item) => <a key={item} href={admin ? '/' : item === 'Subscribe' ? '/subscribe' : item === 'About' ? '/about' : item === 'Terms' ? '/terms' : '#feed'} onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">{item}</a>)}</div>
+        <div className="grid gap-1">{(admin ? ['Back to live feed'] : [...newsCategories, 'About', 'Terms', 'Subscribe']).map((item) => <a key={item} href={admin ? '/' : item === 'Subscribe' ? '/subscribe' : item === 'About' ? '/about' : item === 'Terms' ? '/terms' : item === 'Markets' ? '/markets' : '#feed'} onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">{item}</a>)}</div>
       </nav>}
     </header>
   )
