@@ -1,115 +1,90 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import JsonLd from '../components/JsonLd';
+import { FormEvent, useState } from 'react'
+import JsonLd from '../components/JsonLd'
+
+const signalCards = [
+  { label: 'Global coverage', value: '142', suffix: 'markets', tone: 'blue' },
+  { label: 'Signal latency', value: '< 90', suffix: 'seconds', tone: 'cyan' },
+  { label: 'Source validation', value: '98.4', suffix: '% confidence', tone: 'green' },
+]
+
+const topics = ['Geopolitics', 'Commodities', 'Currencies', 'Technology']
 
 export default function Home() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [email, setEmail] = useState('')
+  const [submitted, setSubmitted] = useState(false)
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setStatus('loading');
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setStatus('success');
-      setEmail('');
-    } catch {
-      setStatus('error');
-    }
-  };
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (email.trim()) setSubmitted(true)
+  }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <JsonLd />
+      <div className="page-grid" aria-hidden="true" />
 
-      {/* Header with Custom Vector Logo */}
-      <header className="w-full border-b border-slate-800/80 bg-slate-900/40 backdrop-blur-md sticky top-0 z-50 py-4 px-6 flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <svg width="170" height="40" viewBox="0 0 600 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <text x="0" y="105" fill="#FFFFFF" fontWeight="900" fontSize="105" fontFamily="Inter, sans-serif" letterSpacing="-2">news</text>
-            <text x="270" y="105" fill="#007BFF" fontWeight="900" fontSize="105" fontFamily="Inter, sans-serif">i</text>
-            <g transform="translate(310, 5)">
-              <circle cx="50" cy="50" r="40" stroke="#007BFF" strokeWidth="16" fill="none" />
-              <rect x="75" y="75" width="18" height="38" rx="4" fill="#007BFF" transform="rotate(-45 75 75)" />
-            </g>
-          </svg>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded-full">
-            v1.0 Beta Waitlist
-          </span>
-        </div>
+      <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between border-b border-border/70 px-5 py-5 lg:px-8">
+        <a href="#top" className="flex items-center gap-3" aria-label="NEWSiQ home">
+          <span className="brand-mark">N</span>
+          <span className="font-mono text-sm font-bold tracking-[0.28em] text-foreground">NEWS<span className="text-primary">iQ</span></span>
+        </a>
+        <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex" aria-label="Main navigation">
+          <a href="#signals" className="transition-colors hover:text-foreground">Signals</a>
+          <a href="#method" className="transition-colors hover:text-foreground">Our method</a>
+          <a href="#access" className="transition-colors hover:text-foreground">Early access</a>
+        </nav>
+        <button className="rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary hover:text-primary">EN / فارسی</button>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-20 text-center flex-1 flex flex-col justify-center items-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-400 mb-8">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          AI Market Intelligence Terminal
-        </div>
-
-        <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight mb-6 leading-tight">
-          Global Micro-News Analysis:<br />
-          <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-            The Foresight That Creates Wealth
-          </span>
-        </h1>
-
-        <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mb-10 leading-relaxed">
-          Stay ahead of high-impact global events before they hit mainstream markets with real-time AI financial analysis.
-        </p>
-
-        {/* Subscription Form */}
-        <div className="w-full max-w-md mb-8">
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              aria-label="Email address"
-              placeholder="Enter your professional email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="flex-1 px-5 py-3.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
-            />
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all shadow-lg shadow-blue-600/25 disabled:opacity-50 text-sm whitespace-nowrap"
-            >
-              {status === 'loading' ? 'Processing...' : 'Get Early Access'}
-            </button>
+      <section id="top" className="relative z-10 mx-auto grid max-w-7xl gap-12 px-5 pb-20 pt-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:px-8 lg:pb-28 lg:pt-28">
+        <div>
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
+            <span className="live-dot" /> Intelligence before consensus
+          </div>
+          <h1 className="max-w-4xl text-balance text-5xl font-semibold leading-[1.02] tracking-[-0.06em] text-foreground sm:text-7xl lg:text-8xl">
+            See the signal<br /><span className="text-primary">before the noise.</span>
+          </h1>
+          <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-muted-foreground sm:text-xl">
+            NEWSiQ turns the world&apos;s smallest, earliest stories into clear signals for the markets that matter.
+          </p>
+          <form id="access" onSubmit={handleSubmit} className="mt-9 flex max-w-lg flex-col gap-3 sm:flex-row">
+            <label className="sr-only" htmlFor="email">Professional email address</label>
+            <input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Your professional email" className="h-13 flex-1 rounded-lg border border-border bg-card px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary" />
+            <button type="submit" className="h-13 rounded-lg bg-primary px-6 text-sm font-bold text-primary-foreground transition-transform hover:-translate-y-0.5">{submitted ? 'You are on the list' : 'Request early access'}</button>
           </form>
-
-          {status === 'success' && (
-            <p className="text-emerald-400 text-sm mt-3 font-medium">Registration successful! Welcome to the waitlist.</p>
-          )}
-          {status === 'error' && (
-            <p className="text-rose-400 text-sm mt-3 font-medium">An error occurred. Please try again.</p>
-          )}
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Private beta · No noise · Built for curious minds</p>
         </div>
 
-        <p className="text-xs text-slate-500 mb-14">
-          Early Access Members Receive 50% Off Lifetime Pro Tier • Zero Spam
-        </p>
-
-        {/* Supported Payment Logos */}
-        <div className="pt-8 border-t border-slate-800/80 w-full max-w-lg">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Supported Payment Gateways</p>
-          <div className="flex flex-wrap justify-center items-center gap-4 font-bold text-xs select-none">
-            <span className="text-[#003087] bg-white px-3 py-1.5 rounded font-extrabold shadow-sm">PayPal</span>
-            <span className="text-[#1A1F71] bg-white px-3 py-1.5 rounded italic font-black shadow-sm">VISA</span>
-            <span className="text-[#EB001B] bg-white px-3 py-1.5 rounded font-black shadow-sm">mastercard</span>
-            <span className="text-[#4285F4] bg-white px-3 py-1.5 rounded font-bold shadow-sm">Google Pay</span>
+        <div className="signal-panel relative mx-auto w-full max-w-md" aria-label="Live intelligence preview">
+          <div className="flex items-center justify-between border-b border-border px-5 py-4">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Live intelligence / 09:42 UTC</span>
+            <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary))]" />
+          </div>
+          <div className="p-5">
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">Signal 00481</p><h2 className="mt-2 text-xl font-semibold leading-snug">Copper supply routes shift as regional tensions rise</h2></div>
+              <span className="rounded border border-amber-400/30 bg-amber-400/10 px-2 py-1 font-mono text-[10px] text-amber-300">HIGH</span>
+            </div>
+            <p className="text-sm leading-6 text-muted-foreground">Early reports indicate a potential disruption across three key transit corridors. Our models are monitoring downstream pressure on industrial metals and FX.</p>
+            <div className="mt-6 flex flex-wrap gap-2">{topics.slice(0, 3).map((topic) => <span key={topic} className="rounded-full bg-secondary px-3 py-1 font-mono text-[10px] text-muted-foreground">#{topic}</span>)}</div>
+            <div className="mt-7 grid grid-cols-2 gap-3 border-t border-border pt-5"><div><p className="font-mono text-[10px] uppercase text-muted-foreground">Potential impact</p><p className="mt-1 text-sm font-semibold text-amber-300">Mixed / short term</p></div><div><p className="font-mono text-[10px] uppercase text-muted-foreground">Confidence</p><p className="mt-1 text-sm font-semibold text-primary">87.2%</p></div></div>
           </div>
         </div>
-      </main>
+      </section>
 
-      {/* Footer */}
-      <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-600">
-        © {new Date().getFullYear()} NEWSiQ.top — All rights reserved.
-      </footer>
-    </div>
-  );
+      <section id="signals" className="relative z-10 mx-auto max-w-7xl border-t border-border/70 px-5 py-12 lg:px-8">
+        <div className="grid gap-4 sm:grid-cols-3">{signalCards.map((card) => <div key={card.label} className="stat-card"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{card.label}</p><p className={`mt-3 text-4xl font-semibold tracking-[-0.05em] ${card.tone === 'blue' ? 'text-blue' : card.tone === 'cyan' ? 'text-cyan' : 'text-green'}`}>{card.value}<span className="ml-2 text-sm font-normal tracking-normal text-muted-foreground">{card.suffix}</span></p></div>)}</div>
+      </section>
+
+      <section id="method" className="relative z-10 mx-auto grid max-w-7xl gap-10 border-t border-border/70 px-5 py-16 lg:grid-cols-[0.7fr_1.3fr] lg:px-8 lg:py-24">
+        <div><p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary">The NEWSiQ method</p><h2 className="mt-4 max-w-md text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">The world moves in micro-signals.</h2></div>
+        <div className="grid gap-4 sm:grid-cols-3"><article className="method-card"><span className="font-mono text-xs text-primary">01</span><h3 className="mt-10 font-semibold">Detect</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Find the small stories forming before they become headlines.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">02</span><h3 className="mt-10 font-semibold">Contextualize</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">Connect events to countries, entities, assets and history.</p></article><article className="method-card"><span className="font-mono text-xs text-primary">03</span><h3 className="mt-10 font-semibold">Understand</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">See what may matter next—without the noise or advice.</p></article></div>
+      </section>
+
+      <footer className="relative z-10 mx-auto flex max-w-7xl flex-col gap-3 border-t border-border px-5 py-7 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8"><span className="font-mono tracking-[0.15em]">NEWSiQ.TOP</span><span>Independent intelligence for a moving world · © 2026</span></footer>
+    </main>
+  )
 }
+
