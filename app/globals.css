@@ -73,7 +73,9 @@
 .checkout-brand { display: inline-flex; min-width: 116px; align-items: center; justify-content: center; border-radius: 7px; padding: 10px 16px; background: hsl(var(--background)); font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -.06em; transition: transform .2s ease, box-shadow .2s ease; }
 .checkout-brand:hover, .checkout-brand:focus-visible { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 22px hsl(var(--foreground) / .12); }
 .checkout-paypal { color: #173f8a; }
+.checkout-visa { color: #1a4aa1; font-style: italic; }
 .checkout-mastercard { color: #eb001b; letter-spacing: -.08em; }
+.checkout-stripe { color: #635bff; letter-spacing: -.03em; }
 @keyframes payment-shimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 @media (prefers-reduced-motion: reduce) { .pricing-card, .checkout-brand, .payment-strip { animation: none; transition: none; } }
 .market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
