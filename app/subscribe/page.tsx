@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { SiteFooter } from "../../components/site/SiteFooter"
 import { SiteHeader } from "../../components/site/SiteHeader"
+import { Breadcrumbs } from "../../components/site/Breadcrumbs"
 
 const features = [
   "Unlimited full AI market-impact analysis",
@@ -19,6 +20,7 @@ export default function SubscribePage() {
       <div className="page-grid" aria-hidden="true" />
       <SiteHeader />
       <section className="relative z-10 mx-auto max-w-6xl px-5 py-16 sm:py-24 lg:px-8">
+        <Breadcrumbs current="Subscribe" />
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">NEWSiQ / Membership</p>
           <h1 className="mt-3 text-balance text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">See the signal behind the headline.</h1>

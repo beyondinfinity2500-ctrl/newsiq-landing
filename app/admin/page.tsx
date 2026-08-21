@@ -3,6 +3,7 @@
 import { FormEvent, useState } from 'react'
 import { SiteFooter } from '../../components/site/SiteFooter'
 import { SiteHeader } from '../../components/site/SiteHeader'
+import { Breadcrumbs } from '../../components/site/Breadcrumbs'
 
 export default function AdminPublisher() {
   const [published, setPublished] = useState(false)
@@ -17,7 +18,7 @@ export default function AdminPublisher() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="page-grid" aria-hidden="true" />
       <SiteHeader admin />
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,680px)_320px] lg:px-8 lg:py-12">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-8 lg:px-8"><Breadcrumbs current="Admin / New post" /></div><div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,680px)_320px] lg:px-8 lg:py-12">
         <section>
           <div className="mb-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">Editorial console / New post</p>
