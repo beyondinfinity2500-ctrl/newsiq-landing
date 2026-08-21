@@ -45,8 +45,10 @@
 .method-card:hover { border-color: hsl(var(--primary) / .6); transform: translateY(-3px); }
 .h-13 { height: 3.25rem; }
 .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-.payment-mark { display: grid; height: 32px; min-width: 52px; place-items: center; border: 1px solid hsl(var(--border)); border-radius: 5px; background: hsl(var(--foreground) / .96); padding: 6px 9px; }
-.payment-mark img { display: block; max-height: 17px; max-width: 48px; width: auto; object-fit: contain; }
+.market-symbol { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 5px 10px; font-size: 10px; color: hsl(var(--muted-foreground)); }
+.market-symbol > span:first-child { color: hsl(var(--foreground)); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; font-weight: 700; }
+.market-symbol-bitcoin { border-color: hsl(var(--primary) / .55); }
+.market-symbol-bitcoin > span:first-child { color: hsl(var(--primary)); }
 .field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 .field-input { width: 100%; border: 1px solid hsl(var(--border)); border-radius: 6px; background: hsl(var(--background)); padding: 11px 12px; color: hsl(var(--foreground)); font-size: 13px; outline: none; transition: border-color .2s ease, box-shadow .2s ease; }
 .field-input:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px hsl(var(--primary) / .12); }
