@@ -38,7 +38,7 @@ export const PRODUCTS: Product[] = [
     description: 'One year of unlimited news and analysis.',
     priceInCents: 9900,
     interval: 'year',
-    access: 'Unlimited news and analysis for one year',
+    access: 'Unlimited Everything for one year',
   },
 ]
 
