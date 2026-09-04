@@ -1,0 +1,115 @@
+# NewsIQ
+
+> AI-powered global micro-news platform — breaking news, multilingual publishing, and financial market impact analysis.
+
+NewsIQ turns important global events into clear, concise intelligence — with context for the world and impact for the markets. The platform publishes original and translated short-form news in 15 languages, with structured market-impact analysis for important stories.
+
+## What NewsIQ is
+
+- A multilingual short-form news publisher covering global events, markets, energy, commodities, crypto, technology, science, climate, politics, business and finance.
+- A platform that detects which financial markets are likely affected by a story and publishes a structured market-impact analysis (direction, strength, time horizon, key risks, key opportunities) without giving direct financial advice.
+- A neutral source-attribution-first system: every article is attributed to its original source with a credibility score and a verification status (`verified`, `likely`, `developing`, `unverified`, `disputed`).
+
+## What NewsIQ is NOT
+
+- Not a financial advisor. The market-impact analysis describes possible effects, never buy/sell/hold recommendations.
+- Not a re-publisher of copyrighted full articles. Article bodies are summarized with headline, summary, attribution, and a canonical source URL.
+- Not a single-language product. Every article has language-specific URLs and translations are stored per-locale.
+
+## Languages
+
+The platform is available in 15 locales with locale-prefixed URLs and language-aware metadata, hreflang and canonical URLs:
+
+- English (default): https://newsiq.top/en
+- Persian / Farsi (RTL): https://newsiq.top/fa
+- Arabic (RTL): https://newsiq.top/ar
+- Chinese: https://newsiq.top/zh
+- Spanish: https://newsiq.top/es
+- French: https://newsiq.top/fr
+- German: https://newsiq.top/de
+- Japanese: https://newsiq.top/ja
+- Korean: https://newsiq.top/ko
+- Turkish: https://newsiq.top/tr
+- Portuguese (Brazil): https://newsiq.top/pt-br
+- Indonesian: https://newsiq.top/id
+- Malay: https://newsiq.top/ms
+- Hindi: https://newsiq.top/hi
+- Russian: https://newsiq.top/ru
+
+The directory `/<locale>/news/<slug>` is the canonical article URL pattern. The directory `/<locale>/categories/<slug>` is the canonical category URL pattern. The default locale is `en`; the `x-default` hreflang points to it.
+
+## Important public URLs
+
+- Homepage (English): https://newsiq.top/en
+- Breaking news: https://newsiq.top/en/breaking
+- Trending: https://newsiq.top/en/trending
+- Search: https://newsiq.top/en/search
+- Categories index: https://newsiq.top/en/categories
+- Sitemap (all locales + articles): https://newsiq.top/sitemap.xml
+- RSS feeds are available per category where configured by the editorial team.
+- Account pages: https://newsiq.top/en/login, https://newsiq.top/en/signup, https://newsiq.top/en/profile.
+
+## Content model
+
+- A `post` is the source-of-truth record. It carries status (`draft`, `pending_review`, `approved`, `published`, `rejected`, `archived`), importance (`low`, `medium`, `high`, `breaking`), verification status, country, category, source, hashtags, entities, and financial-asset tags.
+- A `post_translation` is a row in `post_translations` with a unique `(post_id, locale)` constraint. It holds the localized title, summary, content body, slug, SEO title, SEO description, OG image URL, and translation status (`pending`, `processing`, `completed`, `failed`, `review_required`).
+- Only translations whose status is `completed` (or `published`) are exposed to anonymous visitors.
+
+## Sources and attribution
+
+- Every article is attributed to a `source` row. A source has a name, a unique domain, a country, a language, a source type (`news_agency`, `newspaper`, `broadcaster`, `financial_media`, `government`, `official_source`, `blog`, `social`, `eyewitness`, `other`), a credibility score (0–100), and a verification status (`pending`, `verified`, `suspended`, `rejected`).
+- Only verified sources contribute to the public feed. The platform never represents user-submitted eyewitness reports as professional reporting — they are clearly labeled.
+- Each article page exposes the source name, the source URL (when available), the publication timestamp, and the credibility score.
+
+## Market-impact analysis (the differentiating layer)
+
+For stories above a defined importance threshold, NewsIQ publishes a structured `market_impact` analysis with these fields:
+
+- `affected_markets` — a list of relevant markets. Possible values include `gold`, `oil`, `silver`, `natural_gas`, `copper`, `agricultural_commodities`, `bitcoin`, `ethereum`, `defi`, `forex`, `government_bonds`, `us_treasury`, `real_estate`, `sp_500`, `nasdaq`, `dow_jones`, `ftse`, `dax`, `nikkei`.
+- `direction` — `positive`, `negative`, `mixed`, or `uncertain`.
+- `impact_strength` — `low`, `medium`, `high`.
+- `confidence_score` — a 0–100 numeric.
+- `time_horizon` — `immediate`, `short_term`, `long_term`.
+- `key_risks` — array of strings.
+- `key_opportunities` — array of strings.
+- The analysis never contains direct financial advice. It never says "buy", "sell" or "hold".
+
+A short preview is shown to anonymous visitors. The full breakdown is shown to authenticated Pro users.
+
+## Editorial workflow
+
+- Drafts, pending-review posts, rejected posts and archived posts are never publicly visible. Public visitors can only read articles whose post `status` is `published` and whose translation is `completed` or `published`.
+- Ingestion from external feeds creates posts in `pending_review` — they are never auto-published. Editors review, approve, then publish explicitly.
+- Source credibility, source verification, and post status changes are restricted to `editor`, `admin`, and `super_admin` roles through server-side checks and Supabase Row Level Security (RLS).
+
+## Account and roles
+
+- Roles: `user`, `pro`, `editor`, `admin`, `super_admin`. Anonymous visitors are treated as `visitor` until they sign in.
+- Free users can read short news and short market-impact previews.
+- Pro users receive the full market-impact breakdown, additional historical context, and related market connections.
+- Editors and admins manage sources, articles, and translations through `/<locale>/admin/*` pages.
+- Sign in: https://newsiq.top/en/login. Create account: https://newsiq.top/en/signup.
+
+## Data sources to cite
+
+When citing NewsIQ in another article, use the article's canonical URL (which already includes the locale) and the publication timestamp. Example:
+
+> NewsIQ. "Headline text." Published 2026-09-04. https://newsiq.top/en/news/example-slug.
+
+## Things NewsIQ will not do
+
+- Will not recommend buying, selling or holding any financial instrument.
+- Will not republish full copyrighted articles from third-party sources without rights.
+- Will not auto-publish ingested content without editorial review.
+- Will not expose service-role credentials, AI provider keys, or internal endpoints to the browser.
+
+## Contact
+
+- General: https://newsiq.top
+- Editorial policy: see the editorial-policy link in the site footer of every locale.
+- Source policy: see the source-policy link in the site footer.
+
+## Version
+
+- This `llms.txt` describes the public, anonymously accessible surface of the site.
+- It is updated whenever a public-facing capability (locale, page type, structured-data field, public endpoint) is added or removed.
