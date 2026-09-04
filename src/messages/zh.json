@@ -50,7 +50,9 @@
     "marketImpact": "市场影响分析",
     "related": "相关新闻",
     "eyewitnessNotice": "目击者报告 — 未经证实",
-    "eyewitnessDescription": "这是用户提交的报告，NewsIQ 尚未独立核实。"
+    "eyewitnessDescription": "这是用户提交的报告，NewsIQ 尚未独立核实。",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "搜索",
@@ -64,7 +66,8 @@
       "companies": "公司",
       "countries": "国家",
       "markets": "市场"
-    }
+    },
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "趋势"

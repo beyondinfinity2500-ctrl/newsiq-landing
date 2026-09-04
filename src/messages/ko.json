@@ -50,7 +50,9 @@
     "marketImpact": "시장 영향 분석",
     "related": "관련 뉴스",
     "eyewitnessNotice": "목격자 제보 — 미확인",
-    "eyewitnessDescription": "사용자가 제출한 제보이며 NewsIQ가 독립적으로 확인하지 않았습니다."
+    "eyewitnessDescription": "사용자가 제출한 제보이며 NewsIQ가 독립적으로 확인하지 않았습니다.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "검색",
@@ -64,7 +66,8 @@
       "companies": "기업",
       "countries": "국가",
       "markets": "시장"
-    }
+    },
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "트렌드"

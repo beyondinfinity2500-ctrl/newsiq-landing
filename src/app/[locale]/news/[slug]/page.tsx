@@ -2,7 +2,15 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { getArticleBySlug, getRelatedArticles, getMarketImpact } from "@/features/news/data-access";
+import {
+  getArticleBySlug,
+  getRelatedArticles,
+  getMarketImpact,
+  getAvailableTranslations,
+} from "@/features/news/data-access";
+import { articleMetadata, localizedUrl } from "@/lib/seo/metadata";
+import { newsArticleJsonLd } from "@/lib/seo/structured-data";
+import { siteConfig, type SiteLocale } from "@/config/site";
 import { SourceBadge } from "@/components/shared/source-badge";
 import { VerificationBadge, DevelopingBadge } from "@/components/shared/verification-badge";
 import { ImportanceBadge } from "@/components/news/importance-badge";
@@ -10,9 +18,38 @@ import { EngagementBar } from "@/components/shared/engagement-bar";
 import { RelatedNews } from "@/components/news/related-news";
 import { MarketImpactCard } from "@/components/market/market-impact-card";
 import { AdSlot } from "@/components/shared/ad-slot";
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { formatRelativeTime } from "@/lib/utils";
-import { ChevronRight, Clock, MapPin } from "lucide-react";
+import { ChevronRight, Clock, MapPin, Languages } from "lucide-react";
 import type { MarketImpactResult } from "@/lib/ai/types";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const supabase = await createSupabaseServerClient();
+
+  // Best-effort fetch for metadata — fall back to a generic title if the
+  // article is not available in this locale (the page itself will 404).
+  try {
+    const article = await getArticleBySlug(supabase, slug, locale);
+    const translations = await getAvailableTranslations(supabase, article.id);
+    const available = translations.map((t) => t.locale);
+    return articleMetadata({
+      locale: locale as SiteLocale,
+      title: article.translation.seo_title ?? article.translation.title,
+      description: article.translation.seo_description ?? article.translation.summary ?? "",
+      path: `news/${article.translation.slug}`,
+      image: article.cover_image_url ?? article.translation.og_image_url ?? undefined,
+      availableLocales: available,
+    });
+  } catch {
+    return articleMetadata({
+      locale: locale as SiteLocale,
+      title: "News",
+      description: siteConfig.description,
+      path: `news/${slug}`,
+    });
+  }
+}
 
 export default async function ArticlePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
@@ -26,14 +63,32 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
     notFound();
   }
 
-  const related = await getRelatedArticles(supabase, article.id, locale, 4);
-  const impactResult = await getMarketImpact(supabase, article.id);
+  const [related, impactResult, availableTranslations] = await Promise.all([
+    getRelatedArticles(supabase, article.id, article.resolved_locale, 4),
+    getMarketImpact(supabase, article.id),
+    getAvailableTranslations(supabase, article.id),
+  ]);
   const marketImpact = impactResult as unknown as MarketImpactResult | null;
   const isUserReport = article.source_name === "User Report";
   const isDeveloping = article.verification_status === "developing";
 
+  // Structured data: NewsArticle, anchored to the resolved (displayed) locale.
+  const canonicalUrl = localizedUrl(locale as SiteLocale, `news/${article.translation.slug}`);
+  const jsonLd = newsArticleJsonLd({
+    headline: article.translation.title,
+    description: article.translation.summary ?? article.translation.title,
+    url: canonicalUrl,
+    datePublished: article.published_at ?? article.created_at,
+    image: article.cover_image_url ?? article.translation.og_image_url ?? undefined,
+  });
+
   return (
     <article className="mx-auto max-w-2xl px-4 py-6 lg:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <nav className="mb-6 flex items-center gap-1 text-xs text-muted-foreground" aria-label="Breadcrumb">
         <Link href={`/${locale}`} className="hover:text-foreground">{t("home")}</Link>
         <ChevronRight size={12} aria-hidden="true" />
@@ -52,6 +107,33 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
       <p className="mt-3 text-base leading-relaxed text-muted-foreground">{article.translation.summary}</p>
 
+      {article.is_fallback && (
+        <div className="mt-4 flex items-start gap-2 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-sm text-info">
+          <Languages className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <span>
+            {t("fallbackNotice", {
+              from: article.resolved_locale.toUpperCase(),
+              to: locale.toUpperCase(),
+            })}
+          </span>
+        </div>
+      )}
+
+      {availableTranslations.length > 1 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">{t("availableIn")}:</span>
+          {availableTranslations.map((tr) => (
+            <Link
+              key={tr.locale}
+              href={`/${tr.locale}/news/${tr.slug}`}
+              className={`rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${tr.locale === locale ? "border-foreground bg-foreground text-background" : "border-border bg-card text-muted-foreground hover:bg-muted"}`}
+            >
+              {tr.locale.toUpperCase()}
+            </Link>
+          ))}
+        </div>
+      )}
+
       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-y border-border py-3">
         <SourceBadge name={article.source_name} reliability={article.source_reliability} isUserReport={isUserReport} />
         {article.country && (
@@ -64,6 +146,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
           <Clock size={11} aria-hidden="true" />
           {formatRelativeTime(article.published_at, locale)}
         </span>
+        <div className="ms-auto">
+          <LanguageSwitcher currentLocale={locale as SiteLocale} />
+        </div>
       </div>
 
       {isUserReport && (

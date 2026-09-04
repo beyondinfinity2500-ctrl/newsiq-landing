@@ -57,13 +57,16 @@
     "marketImpact": "Análise de impacto no mercado",
     "related": "Notícias relacionadas",
     "eyewitnessNotice": "Relato de testemunha — Não verificado",
-    "eyewitnessDescription": "Este relato foi enviado por um usuário e ainda não foi verificado independentemente pela NewsIQ."
+    "eyewitnessDescription": "Este relato foi enviado por um usuário e ainda não foi verificado independentemente pela NewsIQ.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "Pesquisar",
     "placeholder": "Pesquise notícias, pessoas, empresas e mercados...",
     "emptyTitle": "Nenhum resultado encontrado",
-    "emptyDescription": "Tente outras palavras-chave ou filtros"
+    "emptyDescription": "Tente outras palavras-chave ou filtros",
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "Em alta"

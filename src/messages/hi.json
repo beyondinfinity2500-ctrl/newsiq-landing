@@ -57,13 +57,16 @@
     "marketImpact": "बाज़ार प्रभाव विश्लेषण",
     "related": "संबंधित खबरें",
     "eyewitnessNotice": "प्रत्यक्षदर्शी रिपोर्ट — अपुष्ट",
-    "eyewitnessDescription": "यह उपयोगकर्ता द्वारा भेजी गई रिपोर्ट है और NewsIQ ने इसे स्वतंत्र रूप से सत्यापित नहीं किया है।"
+    "eyewitnessDescription": "यह उपयोगकर्ता द्वारा भेजी गई रिपोर्ट है और NewsIQ ने इसे स्वतंत्र रूप से सत्यापित नहीं किया है।",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "खोजें",
     "placeholder": "खबर, व्यक्ति, कंपनी और बाज़ार खोजें...",
     "emptyTitle": "कोई परिणाम नहीं मिला",
-    "emptyDescription": "अलग कीवर्ड या फ़िल्टर आज़माएँ"
+    "emptyDescription": "अलग कीवर्ड या फ़िल्टर आज़माएँ",
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "ट्रेंडिंग"

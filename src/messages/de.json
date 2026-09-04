@@ -50,7 +50,9 @@
     "marketImpact": "Marktauswirkungsanalyse",
     "related": "Verwandte Nachrichten",
     "eyewitnessNotice": "Augenzeugenbericht — Unbestätigt",
-    "eyewitnessDescription": "Dieser Bericht wurde von einem Nutzer eingereicht und von NewsIQ noch nicht unabhängig verifiziert."
+    "eyewitnessDescription": "Dieser Bericht wurde von einem Nutzer eingereicht und von NewsIQ noch nicht unabhängig verifiziert.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "Suche",
@@ -64,7 +66,8 @@
       "companies": "Unternehmen",
       "countries": "Länder",
       "markets": "Märkte"
-    }
+    },
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "Trends"

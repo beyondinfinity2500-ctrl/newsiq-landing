@@ -57,13 +57,16 @@
     "marketImpact": "Analisis Dampak Pasar",
     "related": "Berita Terkait",
     "eyewitnessNotice": "Laporan Saksi — Belum Terverifikasi",
-    "eyewitnessDescription": "Laporan ini dikirim pengguna dan belum diverifikasi secara independen oleh NewsIQ."
+    "eyewitnessDescription": "Laporan ini dikirim pengguna dan belum diverifikasi secara independen oleh NewsIQ.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "Cari",
     "placeholder": "Cari berita, orang, perusahaan, dan pasar...",
     "emptyTitle": "Hasil tidak ditemukan",
-    "emptyDescription": "Coba kata kunci atau filter lain"
+    "emptyDescription": "Coba kata kunci atau filter lain",
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "Tren"

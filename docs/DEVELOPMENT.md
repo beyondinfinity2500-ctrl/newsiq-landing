@@ -244,3 +244,79 @@ is `requireEditor`; the second is RLS (`posts_insert_editor`,
 Configure `CRON_SECRET` in Vercel > Project > Settings > Environment
 Variables before the first deploy. Generate with
 `openssl rand -hex 32`.
+
+## Multilingual architecture (Phase 6)
+
+### Supported locales
+
+The full list lives in `siteConfig.locales` (`src/config/site.ts:13`):
+`en, zh, es, fr, de, ja, ko, tr, ar, pt-br, id, ms, fa, hi, ru`.
+Default locale is `en`. RTL is automatically applied for `ar` and `fa`
+via the `textDirection(locale)` helper used in the locale layout.
+
+### URL structure
+
+Locale-prefixed paths only — no subdomains, no cookies:
+
+```
+/en                       homepage
+/en/news/<slug>           article
+/en/categories/<slug>     category
+/en/search?q=...          search
+```
+
+The first segment must always be a valid locale. The middleware
+(`src/middleware.ts`) enforces this and refreshes the Supabase session.
+
+### Translation data model
+
+A single `posts` row holds source-level metadata (status, source,
+original locale, importance, etc.). Each translation is a row in
+`post_translations` with `UNIQUE(post_id, locale)`. The article page
+(`src/app/[locale]/news/[slug]/page.tsx`) loads by slug, then prefers:
+
+1. The requested locale (must have `translation_status` in
+   `completed` / `published`).
+2. The default locale (`en`).
+3. The post's original locale.
+
+Whichever is used sets `is_fallback: true` on the returned record so the
+UI can show a "showing the X original" notice.
+
+### SEO
+
+- `localizedUrl(locale, path)` is the single source for canonical URLs.
+- `articleMetadata({ availableLocales, ... })` builds hreflang links
+  **only** for translations that actually exist in the database, plus an
+  `x-default` pointing to the default locale.
+- Sitemap (`src/app/sitemap.ts`) emits per-locale homepages, all category
+  pages, and one URL per `published` post × public translation (bounded
+  to 5,000 entries).
+- The `robots.ts` keeps `/admin` and `/api/` disallowed; nothing else
+  changed in Phase 6.
+- NewsArticle JSON-LD is rendered inline on article pages with the
+  localized title, description, URL and publication date.
+
+### Translation service boundary (Phase 7-ready)
+
+`src/features/translation/provider.ts` defines the narrow contract that
+Phase 7 will satisfy. Phase 6 ships only a no-op provider that flags
+every request as `review_required`. The interface guarantees:
+
+- React components never import an AI SDK.
+- Provider keys are never bundled in the client.
+- The active provider is swappable from a single server-side call site.
+
+### Search
+
+`searchPublishedArticles(query, { locale })` runs an ILIKE query on
+title, summary and content of `published` posts with a public
+translation in the requested locale. No embeddings, no semantic ranking
+— that lands in a later phase.
+
+### RLS
+
+No RLS changes in Phase 6. Public visitors still read only
+`status = 'published'` posts whose translation is `completed` /
+`published` (enforced by the data-access filters; RLS is the
+authoritative gate).

@@ -50,7 +50,9 @@
     "marketImpact": "تحلیل اثر بازار",
     "related": "اخبار مرتبط",
     "eyewitnessNotice": "گزارش شاهد عینی — تأییدنشده",
-    "eyewitnessDescription": "این گزارش توسط کاربر ارسال شده و هنوز توسط NewsIQ مستقلاً تأیید نشده است."
+    "eyewitnessDescription": "این گزارش توسط کاربر ارسال شده و هنوز توسط NewsIQ مستقلاً تأیید نشده است.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "جست‌وجو",
@@ -64,7 +66,8 @@
       "companies": "شرکت‌ها",
       "countries": "کشورها",
       "markets": "بازارها"
-    }
+    },
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "ترندها"

@@ -50,13 +50,16 @@
     "marketImpact": "Market Impact Analysis",
     "related": "Related News",
     "eyewitnessNotice": "Eyewitness Report — Unverified",
-    "eyewitnessDescription": "This is a user-submitted report and has not been independently verified by NewsIQ."
+    "eyewitnessDescription": "This is a user-submitted report and has not been independently verified by NewsIQ.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "Search",
     "placeholder": "Search news, people, companies, markets...",
     "emptyTitle": "No results found",
     "emptyDescription": "Try different keywords or filters.",
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\"",
     "filter": {
       "all": "All",
       "news": "News",

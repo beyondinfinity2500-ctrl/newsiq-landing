@@ -50,7 +50,9 @@
     "marketImpact": "市場影響分析",
     "related": "関連記事",
     "eyewitnessNotice": "目撃者レポート — 未確認",
-    "eyewitnessDescription": "これはユーザー投稿であり、NewsIQによる独自確認はまだ行われていません。"
+    "eyewitnessDescription": "これはユーザー投稿であり、NewsIQによる独自確認はまだ行われていません。",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "検索",
@@ -64,7 +66,8 @@
       "companies": "企業",
       "countries": "国",
       "markets": "市場"
-    }
+    },
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "トレンド"

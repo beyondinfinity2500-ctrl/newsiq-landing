@@ -57,13 +57,16 @@
     "marketImpact": "Piyasa Etkisi Analizi",
     "related": "İlgili Haberler",
     "eyewitnessNotice": "Görgü Tanığı Raporu — Doğrulanmadı",
-    "eyewitnessDescription": "Bu rapor bir kullanıcı tarafından gönderildi ve NewsIQ tarafından bağımsız olarak doğrulanmadı."
+    "eyewitnessDescription": "Bu rapor bir kullanıcı tarafından gönderildi ve NewsIQ tarafından bağımsız olarak doğrulanmadı.",
+    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
+    "availableIn": "Available in"
   },
   "search": {
     "title": "Ara",
     "placeholder": "Haber, kişi, şirket ve piyasa ara...",
     "emptyTitle": "Sonuç bulunamadı",
-    "emptyDescription": "Farklı anahtar kelimeler veya filtreler deneyin"
+    "emptyDescription": "Farklı anahtar kelimeler veya filtreler deneyin",
+    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
   },
   "trending": {
     "title": "Trendler"
