@@ -147,6 +147,83 @@ export async function reviewPostAction(formData: FormData): Promise<void> {
   redirect(`/${locale}/admin/posts?message=reviewed`);
 }
 
+/**
+ * Submit a draft (or rejected) post for editorial review.
+ * Editor+ only. Status: draft|rejected → pending_review.
+ */
+export async function submitForReviewAction(formData: FormData): Promise<void> {
+  const locale = await getLocale();
+  const postId = z.string().uuid().parse(formData.get("postId"));
+
+  const supabase = await createSupabaseServerClient();
+  const { user, role } = await requireEditor(supabase);
+
+  const post = await getPostById(supabase, postId);
+  if (post.status !== "draft" && post.status !== "rejected") {
+    throw new ValidationError(
+      `Only drafts or rejected posts can be submitted for review (current: "${post.status}").`,
+    );
+  }
+  if (post.translations.length === 0) {
+    throw new ValidationError(
+      "Add at least one translation before submitting for review.",
+    );
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .update({ status: "pending_review" } as never)
+    .eq("id", postId);
+  if (error) throw new ValidationError(error.message);
+
+  logger.info("editorial.submit_for_review", {
+    actorId: user.id,
+    actorRole: role,
+    postId,
+    fromStatus: post.status,
+  });
+
+  revalidatePath(`/${locale}/admin/posts`);
+  revalidatePath(`/${locale}/admin/posts/${postId}`);
+  redirect(`/${locale}/admin/posts/${postId}?message=submitted`);
+}
+
+/**
+ * Archive a post. Editor+ only.
+ * Archived posts are kept in the database for audit/history but are not
+ * publicly visible. Use this for stories that should be retained but
+ * permanently removed from the public feed (legal takedowns, superseded
+ * coverage, etc.).
+ */
+export async function archivePostAction(formData: FormData): Promise<void> {
+  const locale = await getLocale();
+  const postId = z.string().uuid().parse(formData.get("postId"));
+
+  const supabase = await createSupabaseServerClient();
+  const { user, role } = await requireEditor(supabase);
+
+  const post = await getPostById(supabase, postId);
+  if (post.status === "archived") {
+    throw new ValidationError("Post is already archived.");
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .update({ status: "archived" } as never)
+    .eq("id", postId);
+  if (error) throw new ValidationError(error.message);
+
+  logger.warn("editorial.archive", {
+    actorId: user.id,
+    actorRole: role,
+    postId,
+    fromStatus: post.status,
+  });
+
+  revalidatePath(`/${locale}/admin/posts`);
+  redirect(`/${locale}/admin/posts?message=archived`);
+}
+
 // =============================================================================
 // Post creation & translation
 // =============================================================================

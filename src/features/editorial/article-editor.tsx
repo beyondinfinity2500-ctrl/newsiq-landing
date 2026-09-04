@@ -61,7 +61,14 @@ export function ArticleEditor({ locale, post, translations, categories, sources 
 
   const isEdit = !!post;
 
-  const handleSave = (publish: boolean) => {
+  /**
+   * Save the post in its current lifecycle state (or "draft" when creating).
+   * We never directly publish from the form — publication requires going
+   * through the explicit publish flow on the post detail page so that the
+   * pre-publish business rules (status check, translation presence, etc.)
+   * run server-side via `publishPostAction`.
+   */
+  const handleSave = (action: "draft" | "submit_for_review") => {
     setError(null);
     startTransition(async () => {
       try {
@@ -73,8 +80,6 @@ export function ArticleEditor({ locale, post, translations, categories, sources 
           category_id: postForm.category_id || null,
           source_id: postForm.source_id || null,
           country: postForm.country || null,
-          status: publish ? "published" : postForm.status,
-          published_at: publish && !post?.published_at ? new Date().toISOString() : post?.published_at,
         };
 
         let postId = post?.id;
@@ -85,10 +90,11 @@ export function ArticleEditor({ locale, post, translations, categories, sources 
             body: JSON.stringify(postPayload),
           });
         } else {
+          // Always create as a draft. Submission is a separate explicit step.
           const res = await fetch("/api/admin/posts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(postPayload),
+            body: JSON.stringify({ ...postPayload, status: "draft" }),
           });
           const created = await res.json();
           postId = created.id;
@@ -102,9 +108,24 @@ export function ArticleEditor({ locale, post, translations, categories, sources 
               ...trForm,
               locale: postForm.original_locale,
               is_original: true,
-              translation_status: publish ? "published" : trForm.translation_status,
+              translation_status: action === "submit_for_review" ? "reviewed" : trForm.translation_status,
             }),
           });
+        }
+
+        // If the editor asked to submit for review, do it via the Server
+        // Action (which enforces the post-must-have-translation rule).
+        if (action === "submit_for_review" && postId) {
+          const fd = new FormData();
+          fd.set("postId", postId);
+          const res = await fetch("/api/admin/posts/submit", {
+            method: "POST",
+            body: fd,
+          });
+          if (!res.ok && res.status !== 303) {
+            const text = await res.text().catch(() => "");
+            throw new Error(text || "Failed to submit for review");
+          }
         }
 
         router.push(`/${locale}/admin/posts`);
@@ -305,18 +326,23 @@ export function ArticleEditor({ locale, post, translations, categories, sources 
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3">
-        <Button type="button" onClick={() => handleSave(false)} disabled={pending}>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="button" onClick={() => handleSave("draft")} disabled={pending}>
           {pending ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
           {t("posts.saveDraft")}
         </Button>
-        <Button type="button" variant="default" onClick={() => handleSave(true)} disabled={pending}>
-          {pending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-          {t("posts.publish")}
-        </Button>
+        {(!isEdit || post?.status === "draft" || post?.status === "rejected") && (
+          <Button type="button" variant="default" onClick={() => handleSave("submit_for_review")} disabled={pending}>
+            {pending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+            {t("posts.submitForReview")}
+          </Button>
+        )}
         <Button type="button" variant="outline" onClick={() => router.push(`/${locale}/admin/posts`)}>
           {t("posts.cancel")}
         </Button>
+        <p className="ms-auto text-xs text-muted-foreground">
+          {t("posts.publishHint")}
+        </p>
       </div>
     </div>
   );

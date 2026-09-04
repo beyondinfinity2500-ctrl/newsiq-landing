@@ -231,10 +231,32 @@
       "translationPublished": "Published",
       "seoTitle": "SEO Title",
       "seoDescription": "SEO Description",
-      "translations": "Translations",
+      "translations": {
+        "title": "Title",
+        "locale": "Locale",
+        "slug": "Slug",
+        "status": "Status",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "addNew": "Add translation",
+        "empty": "No translations yet. Create one in any of the available locales below.",
+        "original": "Original",
+        "editing": "Editing — {locale}",
+        "confirmDelete": "Delete this translation? The original article is preserved.",
+        "footerNote": "Each translation is a separate row in post_translations. The original article is preserved when you edit or delete a translation.",
+        "errors": {
+          "required": "Title, slug and content are required."
+        }
+      },
       "date": "Date",
       "titleLabel": "Title",
-      "regenerateAnalysis": "Regenerate AI analysis"
+      "regenerateAnalysis": "Regenerate AI analysis",
+      "submitForReview": "Submit for review",
+      "archive": "Archive",
+      "viewLive": "View live",
+      "untitled": "Untitled",
+      "publishHint": "Publication happens from this page once the article is approved."
     }
   }
 }
