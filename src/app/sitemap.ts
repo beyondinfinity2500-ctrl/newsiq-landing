@@ -26,6 +26,8 @@ import { categories } from "@/config/categories";
 
 const MAX_URLS = 5000;
 
+export const dynamic = "force-dynamic";
+
 /** Static pages that should appear in every locale. */
 const STATIC_PATHS = [
   "markets",
