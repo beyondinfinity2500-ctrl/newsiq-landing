@@ -156,7 +156,7 @@
       }
     },
     "posts": {
-      "title": "Articles",
+      "title": "Title",
       "subtitle": "Manage news articles and their translations.",
       "addNew": "New Article",
       "editPost": "Edit Article",
@@ -178,8 +178,22 @@
       "selectSource": "Select source",
       "status": "Status",
       "statusDraft": "Draft",
+      "statusPending": "Pending Review",
+      "statusApproved": "Approved",
       "statusPublished": "Published",
+      "statusRejected": "Rejected",
       "statusArchived": "Archived",
+      "approve": "Approve",
+      "reject": "Reject",
+      "unpublish": "Unpublish",
+      "flash": {
+        "published": "Post published.",
+        "unpublished": "Post unpublished.",
+        "reviewed": "Review recorded.",
+        "created": "Post created.",
+        "translation-saved": "Translation saved.",
+        "role-changed": "User role updated."
+      },
       "importance": "Importance",
       "importanceLow": "Low",
       "importanceMedium": "Medium",
@@ -203,7 +217,6 @@
       "hashtags": "Hashtags",
       "entities": "Entities",
       "financialAssets": "Financial Assets",
-      "title": "Title",
       "summary": "Summary",
       "content": "Content",
       "translationSlug": "Translation Slug",
@@ -214,7 +227,8 @@
       "seoTitle": "SEO Title",
       "seoDescription": "SEO Description",
       "translations": "Translations",
-      "date": "Date"
+      "date": "Date",
+      "titleLabel": "Title"
     }
   }
 }

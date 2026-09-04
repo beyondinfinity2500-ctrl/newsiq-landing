@@ -3,32 +3,57 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { requireEditor } from "@/lib/security/authorization";
 import { getAllPosts } from "@/features/editorial/data-access";
 import { getActiveSources } from "@/features/sources/data-access";
+import {
+  publishPostAction,
+  unpublishPostAction,
+  reviewPostAction,
+} from "@/features/editorial/actions";
 import Link from "next/link";
-import { Plus, Pencil, Eye, Send, FileText } from "lucide-react";
+import { Plus, Pencil, Eye, Send, X, Check, FileText, Archive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const statusStyles: Record<string, string> = {
   draft: "bg-muted text-muted-foreground",
+  pending_review: "bg-warning/15 text-warning",
+  approved: "bg-info/15 text-info",
   published: "bg-success/15 text-success",
-  archived: "bg-destructive/15 text-destructive",
+  rejected: "bg-destructive/15 text-destructive",
+  archived: "bg-muted text-muted-foreground",
 };
+
+function statusBadgeKey(status: string): string {
+  const map: Record<string, string> = {
+    draft: "statusDraft",
+    pending_review: "statusPending",
+    approved: "statusApproved",
+    published: "statusPublished",
+    rejected: "statusRejected",
+    archived: "statusArchived",
+  };
+  return map[status] ?? "statusDraft";
+}
 
 export default async function AdminPostsPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; message?: string }>;
 }) {
   const { locale } = await params;
-  const { status } = await searchParams;
+  const { status, message } = await searchParams;
   const t = await getTranslations("admin");
   const supabase = await createSupabaseServerClient();
 
   await requireEditor(supabase);
 
   const posts = await getAllPosts(supabase, { status, limit: 50 });
+
+  // Bump the types so we can use the Server Actions in <form action={...}>.
+  const publish = publishPostAction;
+  const unpublish = unpublishPostAction;
+  const review = reviewPostAction;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
@@ -45,16 +70,31 @@ export default async function AdminPostsPage({
         </Link>
       </div>
 
+      {message && (
+        <div className="mb-4 rounded-lg border border-success/30 bg-success/5 px-4 py-2 text-sm text-success">
+          {t(`posts.flash.${message}` as never) ?? message}
+        </div>
+      )}
+
       {/* Status filter */}
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex flex-wrap gap-2">
         <Link href={`/${locale}/admin/posts`}>
           <Button variant={!status ? "default" : "outline"} size="sm">{t("posts.all")}</Button>
+        </Link>
+        <Link href={`/${locale}/admin/posts?status=pending_review`}>
+          <Button variant={status === "pending_review" ? "default" : "outline"} size="sm">{t("posts.statusPending")}</Button>
         </Link>
         <Link href={`/${locale}/admin/posts?status=draft`}>
           <Button variant={status === "draft" ? "default" : "outline"} size="sm">{t("posts.statusDraft")}</Button>
         </Link>
+        <Link href={`/${locale}/admin/posts?status=approved`}>
+          <Button variant={status === "approved" ? "default" : "outline"} size="sm">{t("posts.statusApproved")}</Button>
+        </Link>
         <Link href={`/${locale}/admin/posts?status=published`}>
           <Button variant={status === "published" ? "default" : "outline"} size="sm">{t("posts.statusPublished")}</Button>
+        </Link>
+        <Link href={`/${locale}/admin/posts?status=rejected`}>
+          <Button variant={status === "rejected" ? "default" : "outline"} size="sm">{t("posts.statusRejected")}</Button>
         </Link>
         <Link href={`/${locale}/admin/posts?status=archived`}>
           <Button variant={status === "archived" ? "default" : "outline"} size="sm">{t("posts.statusArchived")}</Button>
@@ -90,7 +130,7 @@ export default async function AdminPostsPage({
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${statusStyles[post.status] ?? ""}`}>
-                        {t(`posts.status${post.status.charAt(0).toUpperCase()}${post.status.slice(1)}`)}
+                        {t(`posts.${statusBadgeKey(post.status)}` as never)}
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -116,6 +156,43 @@ export default async function AdminPostsPage({
                             <Pencil className="size-3.5" />
                           </Button>
                         </Link>
+
+                        {post.status === "pending_review" && (
+                          <>
+                            <form action={review}>
+                              <input type="hidden" name="postId" value={post.id} />
+                              <input type="hidden" name="decision" value="approve" />
+                              <Button type="submit" variant="ghost" size="icon" className="size-8 text-success" aria-label={t("posts.approve")}>
+                                <Check className="size-3.5" />
+                              </Button>
+                            </form>
+                            <form action={review}>
+                              <input type="hidden" name="postId" value={post.id} />
+                              <input type="hidden" name="decision" value="reject" />
+                              <Button type="submit" variant="ghost" size="icon" className="size-8 text-destructive" aria-label={t("posts.reject")}>
+                                <X className="size-3.5" />
+                              </Button>
+                            </form>
+                          </>
+                        )}
+
+                        {post.status === "approved" && (
+                          <form action={publish}>
+                            <input type="hidden" name="postId" value={post.id} />
+                            <Button type="submit" variant="ghost" size="icon" className="size-8 text-success" aria-label={t("posts.publish")}>
+                              <Send className="size-3.5" />
+                            </Button>
+                          </form>
+                        )}
+
+                        {post.status === "published" && (
+                          <form action={unpublish}>
+                            <input type="hidden" name="postId" value={post.id} />
+                            <Button type="submit" variant="ghost" size="icon" className="size-8 text-warning" aria-label={t("posts.unpublish")}>
+                              <Archive className="size-3.5" />
+                            </Button>
+                          </form>
+                        )}
                       </div>
                     </td>
                   </tr>

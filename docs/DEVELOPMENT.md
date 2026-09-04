@@ -169,3 +169,78 @@ export and are NOT imported by `src/`:
   avoid scope creep.
 - `sitemap.ts` (root) — Next uses `src/app/sitemap.ts` instead; the
   root file is dead.
+
+## News ingestion (Phase 5)
+
+The ingestion pipeline lives in `src/features/ingestion/pipeline.ts`
+and is invoked exclusively from the server. It is provider-neutral
+and consists of five layers:
+
+```
+Source Adapter (RSS/Atom today; REST tomorrow)
+     ↓
+Normalizer (raw → NormalizedArticle)
+     ↓
+Deduplicator (source+external_id, canonical URL, content fingerprint)
+     ↓
+Validator (Zod shape)
+     ↓
+Post Repository (insert as `pending_review` — never auto-publish)
+```
+
+### Adding a new source
+
+1. Insert a row into `sources` with `feed_url`, `default_language`,
+   and `country_code` populated. Use the admin UI (`/<locale>/admin/sources/new`)
+   or the `createSource` data-access helper.
+2. Set `is_active = true` and `verification_status = 'verified'`
+   (admins only) before triggering ingestion.
+3. Either wait for the cron schedule or call
+   `POST /api/cron/ingest` with `{ "sourceId": "<uuid>" }` and the
+   `x-cron-secret` header.
+
+### Editorial workflow
+
+Post status lifecycle:
+
+```
+draft → pending_review → approved → published → (archived)
+                  ↓
+               rejected
+```
+
+- **draft** — created via the editorial UI; not visible to anyone.
+- **pending_review** — created by the ingestion pipeline; awaits editor.
+- **approved** — passed review; ready to publish.
+- **published** — publicly visible. RLS (`posts_select_published`) is
+  the authoritative gate.
+- **rejected** — failed review; never auto-promoted.
+- **archived** — removed from public listings but retained in DB.
+
+Server Actions in `src/features/editorial/actions.ts`:
+
+- `publishPostAction(formData)` — promoted to `published`. Editor+.
+- `unpublishPostAction(formData)` — moved back to `draft`. Editor+.
+- `reviewPostAction(formData)` — `pending_review` → `approved` or
+  `rejected`. Editor+.
+
+Normal users **cannot** call any of these: the first line of defense
+is `requireEditor`; the second is RLS (`posts_insert_editor`,
+`posts_update_editor`).
+
+## Scheduled ingestion (Phase 5)
+
+- Endpoint: `POST /api/cron/ingest` (see `src/app/api/cron/ingest/route.ts`).
+- Authorization: `x-cron-secret` header compared against
+  `process.env.CRON_SECRET`. Vercel Cron supplies this automatically
+  when configured in `vercel.json`.
+- Body (optional): `{ "sourceId": "<uuid>" }`. Omit to ingest every
+  active source.
+- Schedule: declared in `vercel.json` (`crons` array) — currently
+  `0 */2 * * *` (every 2 hours).
+- Service role client is used because the route bypasses RLS by
+  design; this is the only path that does so for ingestion.
+
+Configure `CRON_SECRET` in Vercel > Project > Settings > Environment
+Variables before the first deploy. Generate with
+`openssl rand -hex 32`.
