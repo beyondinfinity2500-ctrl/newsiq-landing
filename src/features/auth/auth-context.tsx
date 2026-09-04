@@ -32,25 +32,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading: true,
   });
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string): Promise<Profile | null> => {
     const supabase = createSupabaseBrowserClient();
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", userId)
       .maybeSingle();
-    return data as Profile | null;
+    if (error) {
+      // Log to the browser console for debugging; do not throw — the UI should
+      // still render with role="user" so the rest of the page works.
+      console.warn("[auth] profile fetch failed:", error.message);
+      return null;
+    }
+    return (data as Profile | null) ?? null;
   };
 
   const refresh = async () => {
     const supabase = createSupabaseBrowserClient();
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const profile = await fetchProfile(session.user.id);
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const profile = await fetchProfile(user.id);
       setState({
-        user: session.user,
+        user,
         profile,
         role: profile?.role ?? "user",
         loading: false,
@@ -85,7 +91,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       authListener.subscription.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

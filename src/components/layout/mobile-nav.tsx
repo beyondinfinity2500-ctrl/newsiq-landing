@@ -8,13 +8,14 @@ import { categories } from "@/config/categories";
 import type { SiteLocale } from "@/config/site";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/features/auth/auth-context";
+import { isEditorOrAbove } from "@/lib/security/authorization";
 
 export function MobileNav({ locale }: { locale: SiteLocale }) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("nav");
   const tAuth = useTranslations("auth");
   const { profile } = useAuth();
-  const isEditor = profile?.role && ["editor", "admin", "super_admin"].includes(profile.role);
+  const isEditor = isEditorOrAbove(profile?.role);
 
   return (
     <div className="md:hidden">

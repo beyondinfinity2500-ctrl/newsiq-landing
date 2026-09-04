@@ -72,3 +72,12 @@ export async function requireAdmin(client: DbClient) {
 export async function requireSuperAdmin(client: DbClient) {
   return requireRole(client, "super_admin");
 }
+
+/**
+ * Client-side UI helper. NOT a security boundary — for display only.
+ * Use `requireEditor` / `requireRole` on the server to enforce access.
+ */
+export function isEditorOrAbove(role: UserRole | null | undefined): boolean {
+  if (!role) return false;
+  return hasMinRole(role, "editor");
+}

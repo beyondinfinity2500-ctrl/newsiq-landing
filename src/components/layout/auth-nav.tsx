@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/features/auth/auth-context";
 import { signOutAction } from "@/features/auth/actions";
+import { isEditorOrAbove } from "@/lib/security/authorization";
 import { Loader2, User, LogOut, Settings } from "lucide-react";
 
 export function AuthNav({ locale }: { locale: string }) {
   const t = useTranslations("auth");
   const { user, profile, loading } = useAuth();
-  const isEditor = profile?.role && ["editor", "admin", "super_admin"].includes(profile.role);
+  const isEditor = isEditorOrAbove(profile?.role);
 
   if (loading) {
     return <Loader2 className="size-4 animate-spin text-muted-foreground" />;
