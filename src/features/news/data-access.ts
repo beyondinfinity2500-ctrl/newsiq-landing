@@ -232,6 +232,30 @@ export async function getAvailableTranslations(
 }
 
 /**
+ * Return the latest completed AI analysis for an article, or null.
+ * Public readers only ever see `status = 'completed'` rows. Failed and
+ * review_required rows are kept server-side for editorial inspection but
+ * never reach the public page.
+ */
+export async function getLatestAnalysis(
+  client: DbClient,
+  postId: string,
+): Promise<Record<string, unknown> | null> {
+  const { data, error } = await client
+    .from("ai_analyses")
+    .select("result, analysis_version, model, created_at")
+    .eq("post_id", postId)
+    .eq("analysis_type", "news_analyzer")
+    .eq("status", "completed")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return null;
+  const row = data as { result: Record<string, unknown>; analysis_version: string; model: string | null; created_at: string };
+  return { ...row.result, _meta: { version: row.analysis_version, model: row.model, generated_at: row.created_at } };
+}
+
+/**
  * Basic multilingual search: ILIKE on title/summary/content of the
  * requested locale's completed translations. No embeddings, no semantic
  * search — that lands in a later phase.

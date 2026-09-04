@@ -195,7 +195,9 @@
         "reviewed": "Review recorded.",
         "created": "Post created.",
         "translation-saved": "Translation saved.",
-        "role-changed": "User role updated."
+        "role-changed": "User role updated.",
+        "analysis-regenerated": "AI analysis regenerated.",
+        "analysis-reviewed": "AI analysis review saved."
       },
       "importance": "Importance",
       "importanceLow": "Low",
@@ -231,7 +233,8 @@
       "seoDescription": "SEO Description",
       "translations": "Translations",
       "date": "Date",
-      "titleLabel": "Title"
+      "titleLabel": "Title",
+      "regenerateAnalysis": "Regenerate AI analysis"
     }
   }
 }

@@ -7,6 +7,7 @@ import {
   getRelatedArticles,
   getMarketImpact,
   getAvailableTranslations,
+  getLatestAnalysis,
 } from "@/features/news/data-access";
 import { articleMetadata, localizedUrl } from "@/lib/seo/metadata";
 import { newsArticleJsonLd } from "@/lib/seo/structured-data";
@@ -19,6 +20,7 @@ import { RelatedNews } from "@/components/news/related-news";
 import { MarketImpactCard } from "@/components/market/market-impact-card";
 import { AdSlot } from "@/components/shared/ad-slot";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
+import { AiAnalysisSection, type AiAnalysisPayload } from "@/components/ai/ai-analysis-section";
 import { formatRelativeTime } from "@/lib/utils";
 import { ChevronRight, Clock, MapPin, Languages } from "lucide-react";
 import type { MarketImpactResult } from "@/lib/ai/types";
@@ -63,10 +65,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
     notFound();
   }
 
-  const [related, impactResult, availableTranslations] = await Promise.all([
+  const [related, impactResult, availableTranslations, aiAnalysis] = await Promise.all([
     getRelatedArticles(supabase, article.id, article.resolved_locale, 4),
     getMarketImpact(supabase, article.id),
     getAvailableTranslations(supabase, article.id),
+    getLatestAnalysis(supabase, article.id),
   ]);
   const marketImpact = impactResult as unknown as MarketImpactResult | null;
   const isUserReport = article.source_name === "User Report";
@@ -188,6 +191,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
           </div>
         </>
       )}
+
+      {aiAnalysis && <AiAnalysisSection analysis={aiAnalysis as unknown as AiAnalysisPayload} />}
 
       <div className="mt-8">
         <RelatedNews articles={related} locale={locale} label={t("related")} />

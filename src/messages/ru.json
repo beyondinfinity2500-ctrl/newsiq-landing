@@ -222,8 +222,11 @@
         "reviewed": "Review recorded.",
         "created": "Post created.",
         "translation-saved": "Translation saved.",
-        "role-changed": "User role updated."
-      }
+        "role-changed": "User role updated.",
+        "analysis-regenerated": "AI analysis regenerated.",
+        "analysis-reviewed": "AI analysis review saved."
+      },
+      "regenerateAnalysis": "Regenerate AI analysis"
     }
   }
 }

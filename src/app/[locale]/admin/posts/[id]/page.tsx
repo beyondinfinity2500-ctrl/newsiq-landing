@@ -3,7 +3,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { requireEditor } from "@/lib/security/authorization";
 import { getPostById } from "@/features/editorial/data-access";
 import { getActiveSources } from "@/features/sources/data-access";
+import { regenerateAnalysisAction } from "@/features/ai/actions";
 import { ArticleEditor } from "@/features/editorial/article-editor";
+import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -40,7 +43,16 @@ export default async function EditPostPage({
         <ArrowLeft className="size-4" />
         {t("posts.back")}
       </Link>
-      <h1 className="mb-6 text-2xl font-bold text-foreground">{t("posts.editPost")}</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-foreground">{t("posts.editPost")}</h1>
+        <form action={regenerateAnalysisAction}>
+          <input type="hidden" name="postId" value={post.id} />
+          <Button type="submit" variant="outline" size="sm">
+            <Sparkles className="size-4" />
+            {t("posts.regenerateAnalysis")}
+          </Button>
+        </form>
+      </div>
       <ArticleEditor locale={locale} post={post} translations={post.translations} categories={categories} sources={sources} />
     </div>
   );
