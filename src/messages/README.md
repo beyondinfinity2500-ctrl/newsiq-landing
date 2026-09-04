@@ -1,0 +1,1 @@
+Message bundles use the locale codes declared in `src/config/site.ts`. Keep keys aligned across every locale. Add a new locale to the site configuration and create its JSON bundle before exposing it in routing.
