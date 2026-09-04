@@ -3,8 +3,11 @@
  *
  * Emits, in priority order:
  *   1. Per-locale homepages (15 locales).
- *   2. Per-locale category pages.
- *   3. Per-post URLs for every locale with a public translation.
+ *   2. Per-locale static pages (about, contact, terms, privacy, cookies,
+ *      editorial-policy, source-policy, careers, advertising, markets,
+ *      subscribe).
+ *   3. Per-locale category pages.
+ *   4. Per-post URLs for every locale with a public translation.
  *
  * Each entry includes `alternates.languages` so search engines can pair
  * translations without re-fetching the HTML. The XML namespace required for
@@ -23,23 +26,49 @@ import { categories } from "@/config/categories";
 
 const MAX_URLS = 5000;
 
+/** Static pages that should appear in every locale. */
+const STATIC_PATHS = [
+  "markets",
+  "subscribe",
+  "about",
+  "contact",
+  "careers",
+  "advertising",
+  "terms",
+  "privacy",
+  "cookies",
+  "editorial-policy",
+  "source-policy",
+] as const;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url;
   const now = new Date();
 
   // 1) Locale homepages.
-  const homes: MetadataRoute.Sitemap = siteConfig.locales.map((locale) => {
-    const languages = buildLanguages("");
-    return {
-      url: `${baseUrl}/${locale}`,
-      lastModified: now,
-      changeFrequency: "hourly",
-      priority: locale === siteConfig.defaultLocale ? 1 : 0.9,
-      alternates: { languages },
-    };
-  });
+  const homes: MetadataRoute.Sitemap = siteConfig.locales.map((locale) => ({
+    url: `${baseUrl}/${locale}`,
+    lastModified: now,
+    changeFrequency: "hourly",
+    priority: locale === siteConfig.defaultLocale ? 1 : 0.9,
+    alternates: { languages: buildLanguages("") },
+  }));
 
-  // 2) Category pages — one URL per (locale, category) pair.
+  // 2) Static informational pages per locale.
+  const staticPages: MetadataRoute.Sitemap = [];
+  for (const locale of siteConfig.locales) {
+    for (const path of STATIC_PATHS) {
+      staticPages.push({
+        url: `${baseUrl}/${locale}/${path}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.6,
+        alternates: { languages: buildLanguages(path) },
+      });
+    }
+  }
+
+  // 3) Category pages — one URL per (locale, category) pair.
   const categoryPages: MetadataRoute.Sitemap = [];
   for (const locale of siteConfig.locales) {
     for (const cat of categories) {
@@ -53,7 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // 3) Per-post URLs for locales that have a public translation.
+  // 4) Per-post URLs for locales that have a public translation.
   const postUrls: MetadataRoute.Sitemap = [];
   try {
     const admin = createSupabaseAdminClient();
@@ -73,8 +102,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }>) {
         const path = `news/${row.post_translations[0]?.slug ?? row.id}`;
         const languages = buildLanguages(path, row.post_translations.map((t) => t.locale));
-        // Emit one URL per available translation; each carries the same
-        // hreflang set so search engines can pair them.
         for (const tr of row.post_translations) {
           postUrls.push({
             url: `${baseUrl}/${tr.locale}/${path}`,
@@ -91,15 +118,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Sitemap must never crash the build.
   }
 
-  return [...homes, ...categoryPages, ...postUrls].slice(0, MAX_URLS);
+  return [...homes, ...staticPages, ...categoryPages, ...postUrls].slice(0, MAX_URLS);
 }
 
 /**
  * Build the hreflang map (`alternates.languages`) for a given path.
  * `availableLocales` is used by article pages to limit hreflang to the
- * locales that actually have a translation. For shared pages (home, category)
- * we pass nothing and the helper advertises every supported locale — search
- * engines will simply ignore missing combinations on the destination side.
+ * locales that actually have a translation. For shared pages (home, category,
+ * static) we pass nothing and the helper advertises every supported locale.
  */
 function buildLanguages(path: string, availableLocales?: readonly string[]): Record<string, string> {
   const locales = availableLocales && availableLocales.length > 0
