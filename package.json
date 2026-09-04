@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
-    "@netlify/plugin-nextjs": "^5.15.13",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
     "class-variance-authority": "^0.7.1",
@@ -31,10 +30,13 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "autoprefixer": "^10.5.4",
+    "autoprefixer": "^10.4.0",
     "eslint": "^9",
     "eslint-config-next": "^15.5.9",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

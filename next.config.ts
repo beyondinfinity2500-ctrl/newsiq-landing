@@ -12,9 +12,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
-  experimental: {
-    optimizePackageImports: ["lucide-react", "date-fns"],
-  },
 };
 
 export default withNextIntl(nextConfig);
