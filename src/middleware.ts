@@ -26,6 +26,12 @@ const PROTECTED_PREFIX = "/admin";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Step 0: The root path `/` serves the root home (src/app/page.tsx) directly.
+  // Skip next-intl locale detection for `/` so users are not forced into a locale.
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
+
   // Step 1: Run next-intl to handle locale routing
   const response = intlMiddleware(request);
 
