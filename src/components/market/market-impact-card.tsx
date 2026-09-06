@@ -22,7 +22,7 @@ const assetLabels: Record<MarketAsset, string> = {
   global_indexes: "Global Indexes",
 };
 
-export function MarketImpactCard({ analysis, isPro = false, label = "Market Impact Analysis" }: { analysis: MarketImpactResult; isPro?: boolean; label?: string }) {
+export function MarketImpactCard({ analysis, isPro = false, label = "Market Impact" }: { analysis: MarketImpactResult; isPro?: boolean; label?: string }) {
   return (
     <section className="rounded-xl border border-border bg-card p-6" aria-label={label}>
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -32,7 +32,7 @@ export function MarketImpactCard({ analysis, isPro = false, label = "Market Impa
             <h2 className="text-lg font-bold text-foreground">{label}</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            AI-generated analysis based on this news event. Not personalized financial advice.
+            Analysis based on this news event. Not personalized financial advice.
           </p>
         </div>
         <ConfidenceMeter score={analysis.confidence} />

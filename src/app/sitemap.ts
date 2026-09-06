@@ -28,7 +28,7 @@ const MAX_URLS = 5000;
 
 export const dynamic = "force-dynamic";
 
-/** Static pages that should appear in every locale. */
+/** Static + dynamic info pages that should appear in every locale. */
 const STATIC_PATHS = [
   "markets",
   "subscribe",
@@ -41,18 +41,36 @@ const STATIC_PATHS = [
   "cookies",
   "editorial-policy",
   "source-policy",
+  "breaking",
+  "trending",
+  "search",
+  "categories",
+  "login",
+  "signup",
+  "profile",
+  "forgot-password",
+  "reset-password",
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url;
   const now = new Date();
 
-  // 1) Locale homepages.
+  // 1) Root home (no locale prefix).
+  const rootHome: MetadataRoute.Sitemap[number] = {
+    url: `${baseUrl}`,
+    lastModified: now,
+    changeFrequency: "hourly",
+    priority: 1,
+    alternates: { languages: { "x-default": `${baseUrl}` } },
+  };
+
+  // 2) Locale homepages.
   const homes: MetadataRoute.Sitemap = siteConfig.locales.map((locale) => ({
     url: `${baseUrl}/${locale}`,
     lastModified: now,
     changeFrequency: "hourly",
-    priority: locale === siteConfig.defaultLocale ? 1 : 0.9,
+    priority: locale === siteConfig.defaultLocale ? 0.95 : 0.9,
     alternates: { languages: buildLanguages("") },
   }));
 
@@ -120,7 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Sitemap must never crash the build.
   }
 
-  return [...homes, ...staticPages, ...categoryPages, ...postUrls].slice(0, MAX_URLS);
+  return [rootHome, ...homes, ...staticPages, ...categoryPages, ...postUrls].slice(0, MAX_URLS);
 }
 
 /**
