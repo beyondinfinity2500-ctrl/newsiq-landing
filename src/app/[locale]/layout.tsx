@@ -1,7 +1,7 @@
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { siteConfig, textDirection, type SiteLocale } from "@/config/site";
+import { siteConfig, textDirection } from "@/config/site";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppFooter } from "@/components/layout/app-footer";
 import { AuthProvider } from "@/features/auth/auth-context";
@@ -20,9 +20,9 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
     <NextIntlClientProvider messages={messages}>
       <AuthProvider>
         <div lang={locale} dir={textDirection(locale)} className="flex min-h-screen flex-col">
-          <AppHeader locale={locale as SiteLocale} />
+          <AppHeader />
           <main className="flex-1">{children}</main>
-          <AppFooter locale={locale as SiteLocale} />
+          <AppFooter />
         </div>
       </AuthProvider>
     </NextIntlClientProvider>
