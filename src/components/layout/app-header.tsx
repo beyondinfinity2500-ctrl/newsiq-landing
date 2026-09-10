@@ -36,14 +36,14 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
   </svg>
 )
 
-const LanguageDropdown = ({ setLangOpen }: { langOpen: boolean; setLangOpen: (v: boolean) => void }) => (
+const LanguageDropdown = ({ setLangOpen }: { setLangOpen: (v: boolean) => void }) => (
   <div className="absolute right-0 top-full z-[100] mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
     <div className="max-h-72 overflow-y-auto p-1.5">
       {languages.map((lang) => (
         <Link
           key={lang.code}
           href={`/${lang.code}`}
-          onClick={() => setLangOpen(false)}
+          onMouseDown={() => setLangOpen(false)}
           className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
           role="option"
         >
@@ -62,6 +62,7 @@ export function AppHeader() {
   const langRef = useRef<HTMLDivElement>(null)
   const mobileRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
+  const locale = pathname.split('/')[1] || 'en'
 
   const closeAll = useCallback(() => { setMobileOpen(false); setLangOpen(false) }, [])
 
@@ -103,21 +104,21 @@ export function AppHeader() {
 
         {/* ── Desktop nav ── */}
         <nav className="ml-6 hidden items-center gap-0 md:flex" aria-label="Primary navigation">
-          <Link href="/" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Home</Link>
-          <Link href="/about" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</Link>
+          <Link href={`/${locale}`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Home</Link>
+          <Link href={`/${locale}/about`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</Link>
 
           <span className="inline-flex items-center gap-0">
             <button type="button" onClick={() => setLive(v => !v)} className="live-toggle" aria-pressed={live} aria-label={live ? 'Pause live updates' : 'Resume live updates'}>
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live' : 'Paused'}
             </button>
-            <Link href="/trending" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href="/markets" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href={`/${locale}/trending`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Trending</Link>
+            <Link href={`/${locale}/markets`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
           </span>
 
-          <Link href="/terms" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
+          <Link href={`/${locale}/terms`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
 
-          <Link href="/subscribe" className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
+          <Link href={`/${locale}/subscribe`} className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
         </nav>
 
         {/* ── Right side ── */}
@@ -157,16 +158,16 @@ export function AppHeader() {
       {mobileOpen && (
         <nav ref={mobileRef} id="mobile-navigation" className="border-t border-border/70 bg-background px-4 py-3 md:hidden" aria-label="Mobile navigation">
           <div className="grid gap-0.5">
-            <button type="button" onClick={() => setLive(v => !v)} className="live-toggle justify-start px-3 py-2.5" aria-pressed={live}>
+            <button type="button" onMouseDown={() => setLive(v => !v)} className="live-toggle justify-start px-3 py-2.5" aria-pressed={live}>
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live updates on' : 'Live updates paused'}
             </button>
-            <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
-            <Link href="/about" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
-            <Link href="/trending" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href="/markets" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
-            <Link href="/terms" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
-            <Link href="/subscribe" onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
+            <Link href={`/${locale}`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
+            <Link href={`/${locale}/about`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
+            <Link href={`/${locale}/trending`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
+            <Link href={`/${locale}/markets`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href={`/${locale}/terms`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
+            <Link href={`/${locale}/subscribe`} onMouseDown={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
           </div>
         </nav>
       )}
