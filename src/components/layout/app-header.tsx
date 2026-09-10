@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NiqMascot } from '@/components/brand/NiqMascot'
@@ -23,72 +23,76 @@ const languages = [
   { code: 'ru', name: 'Russian', native: 'Русский' },
 ] as const
 
-const desktopLinks = [
-  { href: '/about', label: 'About' },
-  { href: '/trending', label: 'Trending' },
-  { href: '/markets', label: 'Markets' },
-]
-
 export function AppHeader() {
-  const [open, setOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const [live, setLive] = useState(true)
   const langRef = useRef<HTMLDivElement>(null)
   const mobileRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
 
-  useEffect(() => { setOpen(false) }, [pathname])
+  const closeAll = useCallback(() => { setMobileOpen(false); setLangOpen(false) }, [])
+
+  useEffect(() => { closeAll() }, [pathname, closeAll])
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setOpen(false); setLangOpen(false) }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeAll() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [closeAll])
 
   useEffect(() => {
     if (!langOpen) return
-    const handleClick = (e: MouseEvent) => {
+    const onClick = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
     }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
   }, [langOpen])
 
   useEffect(() => {
-    if (!open) return
-    const handleClick = (e: MouseEvent) => {
-      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) setOpen(false)
+    if (!mobileOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) setMobileOpen(false)
     }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [open])
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [mobileOpen])
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md shadow-[0_1px_3px_hsl(var(--background)/.6)]">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 lg:px-8">
-        {/* Logo */}
+
+        {/* ── Logo ── */}
         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="NEWSiQ home">
           <NiqMascot size={28} />
           <span className="font-mono text-sm font-bold tracking-[0.22em]">NEWS<span className="text-primary">iQ</span></span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="ml-8 hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-          {desktopLinks.map(({ href, label }) => (
-            <Link key={href} href={href} className="rounded-md px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">{label}</Link>
-          ))}
-          <button type="button" onClick={() => setLive(v => !v)} className="live-toggle ml-1" aria-pressed={live} aria-label={live ? 'Pause live updates' : 'Resume live updates'}>
-            <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
-            {live ? 'Live' : 'Paused'}
-          </button>
-          <Link href="/subscribe" className="ml-2 shrink-0 rounded-md bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
+        {/* ── Desktop nav ── */}
+        <nav className="ml-6 hidden items-center gap-0 md:flex" aria-label="Primary navigation">
+          <Link href="/" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Home</Link>
+          <Link href="/about" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</Link>
+
+          <span className="inline-flex items-center gap-0">
+            <button type="button" onClick={() => setLive(v => !v)} className="live-toggle" aria-pressed={live} aria-label={live ? 'Pause live updates' : 'Resume live updates'}>
+              <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
+              {live ? 'Live' : 'Paused'}
+            </button>
+            <Link href="/live" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Live Feed</Link>
+            <Link href="/markets" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
+          </span>
+
+          <Link href="/geopolitics" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Geopolitics</Link>
+          <Link href="/technology" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Technology</Link>
+          <Link href="/terms" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
+
+          <Link href="/subscribe" className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
         </nav>
 
-        {/* Right side */}
+        {/* ── Right side ── */}
         <div className="flex items-center gap-2">
-          {/* Language switcher */}
+          {/* Language dropdown — desktop */}
           <div ref={langRef} className="relative hidden sm:block">
             <button
               type="button"
@@ -108,7 +112,7 @@ export function AppHeader() {
               </svg>
             </button>
             {langOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
+              <div className="absolute right-0 top-full z-[100] mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
                 <div className="max-h-72 overflow-y-auto p-1.5">
                   {languages.map((lang) => (
                     <Link
@@ -131,28 +135,34 @@ export function AppHeader() {
           <button
             type="button"
             className="menu-button md:hidden"
-            aria-expanded={open}
+            aria-expanded={mobileOpen}
             aria-controls="mobile-navigation"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            onClick={() => setOpen(v => !v)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMobileOpen(v => !v)}
           >
             <span /><span /><span />
           </button>
         </div>
       </div>
 
-      {/* Mobile nav */}
-      {open && (
+      {/* ── Mobile nav ── */}
+      {mobileOpen && (
         <nav ref={mobileRef} id="mobile-navigation" className="border-t border-border/70 bg-background px-4 py-3 md:hidden" aria-label="Mobile navigation">
           <div className="grid gap-0.5">
             <button type="button" onClick={() => setLive(v => !v)} className="live-toggle justify-start px-3 py-2.5" aria-pressed={live}>
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live updates on' : 'Live updates paused'}
             </button>
-            <Link href="/trending" onClick={() => setOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href="/markets" onClick={() => setOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
-            <Link href="/about" onClick={() => setOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
-            <Link href="/subscribe" onClick={() => setOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
+            <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
+            <Link href="/about" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
+            <Link href="/live" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Live Feed</Link>
+            <Link href="/markets" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href="/geopolitics" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Geopolitics</Link>
+            <Link href="/technology" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Technology</Link>
+            <Link href="/terms" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
+            <Link href="/subscribe" onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
+
+            {/* Mobile language grid */}
             <div className="mt-2 border-t border-border pt-2">
               <p className="px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Languages</p>
               <div className="flex flex-wrap gap-1.5 px-3 pt-1">
@@ -160,7 +170,7 @@ export function AppHeader() {
                   <Link
                     key={lang.code}
                     href={`/${lang.code}`}
-                    onClick={() => setOpen(false)}
+                    onClick={() => setMobileOpen(false)}
                     className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                   >
                     {lang.native}
