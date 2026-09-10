@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site";
 
 const MAX_URLS = 5000;
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 

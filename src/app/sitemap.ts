@@ -28,10 +28,8 @@ const MAX_URLS = 5000;
 
 export const dynamic = "force-dynamic";
 
-/** Static + dynamic info pages that should appear in every locale. */
+/** Static informational pages that should appear in every locale. */
 const STATIC_PATHS = [
-  "markets",
-  "subscribe",
   "about",
   "contact",
   "careers",
@@ -41,15 +39,11 @@ const STATIC_PATHS = [
   "cookies",
   "editorial-policy",
   "source-policy",
+  "markets",
+  "subscribe",
   "breaking",
   "trending",
-  "search",
   "categories",
-  "login",
-  "signup",
-  "profile",
-  "forgot-password",
-  "reset-password",
 ] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

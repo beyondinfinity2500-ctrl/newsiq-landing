@@ -160,10 +160,56 @@ const russiaUkraineStory: ArticleWithDetails = {
   resolved_locale: "en",
 };
 
-
+const zelenskyDroneStory: ArticleWithDetails = {
+  id: "seed-zelensky-plane-drone-oslo-2026",
+  slug: "zelensky-plane-almost-hit-by-drone-en-route-to-oslo",
+  title: "",
+  summary: null,
+  content: null,
+  source_id: null,
+  country_id: null,
+  category_id: "geopolitics",
+  author_id: null,
+  verification_status: "verified",
+  importance: "breaking",
+  content_type: "news",
+  status: "published",
+  original_locale: "en",
+  source_url: "https://www.radiofarda.com/a/zelensky-plane-almost-hit-by-drone-en-route-to-oslo-norway-pm/33851206.html",
+  country: "Ukraine",
+  continent: "europe",
+  entities: ["Volodymyr Zelensky", "Norway", "Oslo", "NATO"],
+  financial_assets: ["global_indexes", "government_bonds", "forex"],
+  hashtags: ["Zelensky", "drone", "Norway", "Ukraine", "NATO"],
+  cover_image_url: null,
+  published_at: nowIso,
+  created_at: nowIso,
+  updated_at: nowIso,
+  translation: {
+    id: "seed-zelensky-plane-drone-oslo-2026-en",
+    post_id: "seed-zelensky-plane-drone-oslo-2026",
+    locale: "en",
+    title: "Zelensky's Plane Almost Hit by Drone en Route to Oslo, Norway PM Confirms",
+    summary:
+      "Ukrainian President Volodymyr Zelensky's aircraft was nearly struck by a drone while flying to Oslo for talks with Norwegian leaders, Norwegian Prime Minister confirmed. The incident, which occurred in international airspace, has raised fresh security concerns about drone threats to VIP travel. Norway's PM called the event \"deeply troubling\" and pledged increased air security cooperation with Ukraine. NATO allies are reviewing protective protocols for senior officials.",
+    content: null,
+    slug: "zelensky-plane-almost-hit-by-drone-en-route-to-oslo",
+    seo_title: "Zelensky Plane Drone Incident Oslo 2026",
+    seo_description: null,
+    og_image_url: null,
+    translation_status: "published",
+    is_original: true,
+    created_at: nowIso,
+    updated_at: nowIso,
+  },
+  source_name: "Radio Farda",
+  source_reliability: 85,
+  is_fallback: false,
+  resolved_locale: "en",
+};
 
 export const homepageBreaking: ArticleWithDetails[] = [iranOilStory, unMapStory];
 
-export const homepageFeed: ArticleWithDetails[] = [unMapStory, iranOilStory, russiaUkraineStory];
+export const homepageFeed: ArticleWithDetails[] = [zelenskyDroneStory, unMapStory, iranOilStory, russiaUkraineStory];
 
 export const homepageTrending: ArticleWithDetails[] = [iranOilStory, russiaUkraineStory, unMapStory];
