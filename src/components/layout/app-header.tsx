@@ -23,6 +23,38 @@ const languages = [
   { code: 'ru', name: 'Russian', native: 'Русский' },
 ] as const
 
+const GlobeIcon = () => (
+  <svg aria-hidden="true" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3c2.4 2.5 3.5 5.5 3.5 9S14.4 18.5 12 21c-2.4-2.5-3.5-5.5-3.5-9S9.6 5.5 12 3Z" />
+  </svg>
+)
+
+const ChevronIcon = ({ open }: { open: boolean }) => (
+  <svg aria-hidden="true" className={`h-2.5 w-2.5 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+  </svg>
+)
+
+const LanguageDropdown = ({ setLangOpen }: { langOpen: boolean; setLangOpen: (v: boolean) => void }) => (
+  <div className="absolute right-0 top-full z-[100] mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
+    <div className="max-h-72 overflow-y-auto p-1.5">
+      {languages.map((lang) => (
+        <Link
+          key={lang.code}
+          href={`/${lang.code}`}
+          onClick={() => setLangOpen(false)}
+          className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
+          role="option"
+        >
+          <span className="text-foreground">{lang.native}</span>
+          <span className="text-[10px] text-muted-foreground">{lang.name}</span>
+        </Link>
+      ))}
+    </div>
+  </div>
+)
+
 export function AppHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
@@ -79,12 +111,10 @@ export function AppHeader() {
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live' : 'Paused'}
             </button>
-            <Link href="/live" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Live Feed</Link>
+            <Link href="/trending" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Trending</Link>
             <Link href="/markets" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
           </span>
 
-          <Link href="/geopolitics" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Geopolitics</Link>
-          <Link href="/technology" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Technology</Link>
           <Link href="/terms" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
 
           <Link href="/subscribe" className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
@@ -92,8 +122,8 @@ export function AppHeader() {
 
         {/* ── Right side ── */}
         <div className="flex items-center gap-2">
-          {/* Language dropdown — desktop */}
-          <div ref={langRef} className="relative hidden sm:block">
+          {/* Language dropdown — all screens */}
+          <div ref={langRef} className="relative">
             <button
               type="button"
               onClick={() => setLangOpen(v => !v)}
@@ -102,33 +132,11 @@ export function AppHeader() {
               aria-haspopup="listbox"
               aria-label="Select language"
             >
-              <svg aria-hidden="true" className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M3 12h18M12 3c2.4 2.5 3.5 5.5 3.5 9S14.4 18.5 12 21c-2.4-2.5-3.5-5.5-3.5-9S9.6 5.5 12 3Z" />
-              </svg>
-              EN
-              <svg aria-hidden="true" className={`h-2.5 w-2.5 transition-transform ${langOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-              </svg>
+              <GlobeIcon />
+              <span className="hidden sm:inline">EN</span>
+              <ChevronIcon open={langOpen} />
             </button>
-            {langOpen && (
-              <div className="absolute right-0 top-full z-[100] mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
-                <div className="max-h-72 overflow-y-auto p-1.5">
-                  {languages.map((lang) => (
-                    <Link
-                      key={lang.code}
-                      href={`/${lang.code}`}
-                      onClick={() => setLangOpen(false)}
-                      className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
-                      role="option"
-                    >
-                      <span className="text-foreground">{lang.native}</span>
-                      <span className="text-[10px] text-muted-foreground">{lang.name}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            {langOpen && <LanguageDropdown setLangOpen={setLangOpen} />}
           </div>
 
           {/* Mobile hamburger */}
@@ -155,29 +163,10 @@ export function AppHeader() {
             </button>
             <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
             <Link href="/about" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
-            <Link href="/live" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Live Feed</Link>
+            <Link href="/trending" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
             <Link href="/markets" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
-            <Link href="/geopolitics" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Geopolitics</Link>
-            <Link href="/technology" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Technology</Link>
             <Link href="/terms" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
             <Link href="/subscribe" onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
-
-            {/* Mobile language grid */}
-            <div className="mt-2 border-t border-border pt-2">
-              <p className="px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Languages</p>
-              <div className="flex flex-wrap gap-1.5 px-3 pt-1">
-                {languages.map((lang) => (
-                  <Link
-                    key={lang.code}
-                    href={`/${lang.code}`}
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                  >
-                    {lang.native}
-                  </Link>
-                ))}
-              </div>
-            </div>
           </div>
         </nav>
       )}
