@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   alternates: { canonical: siteConfig.url },
+  icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
   openGraph: { type: "website", siteName: siteConfig.name, title: "NewsIQ — The signal behind the headlines", description: siteConfig.description, url: siteConfig.url },
   twitter: { card: "summary_large_image", title: "NewsIQ — The signal behind the headlines", description: siteConfig.description },
   robots: { index: true, follow: true },
