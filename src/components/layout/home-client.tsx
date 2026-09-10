@@ -3,18 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { homepageBreaking, homepageFeed, homepageTrending } from '@/lib/homepage-content'
-import { AppHeader } from '@/components/layout/app-header'
-import { AppFooter } from '@/components/layout/app-footer'
 import { formatRelativeTime } from '@/lib/utils'
-
-function LockIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="4" y="10" width="16" height="11" rx="2" />
-      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-    </svg>
-  )
-}
 
 function GlobeIcon() {
   return (
@@ -207,22 +196,26 @@ export default function HomeClient({ locale }: { locale: string }) {
                 {/* AI Market Impact */}
                 <div className="mt-5 rounded-md border border-primary/30 bg-primary/[0.06] p-4">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">AI market impact</span>
-                    <span className="font-mono text-[10px] text-muted-foreground">Context only</span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">AI market context</span>
+                    {article.importance === 'breaking' && (
+                      <span className="rounded bg-red-400/10 px-2 py-0.5 font-mono text-[10px] text-red-300">Breaking</span>
+                    )}
                   </div>
                   <p className="mt-3 text-sm leading-6 text-foreground/85">
                     {article.financial_assets.length > 0
                       ? `Potential implications for: ${article.financial_assets.join(', ')}.`
                       : 'Market impact analysis will be available soon.'}
                   </p>
-                  <Link
-                    href="/subscribe"
-                    className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline"
-                    aria-label="Subscribe to unlock full analysis"
-                  >
-                    <LockIcon />
-                    Subscribe to unlock full analysis
-                  </Link>
+                  {article.entities.length > 0 && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Key entities: {article.entities.join(' · ')}
+                    </p>
+                  )}
+                  {article.country && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Region: {article.country}
+                    </p>
+                  )}
                 </div>
 
                 {/* Footer */}

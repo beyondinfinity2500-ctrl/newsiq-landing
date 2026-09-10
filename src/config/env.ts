@@ -9,8 +9,7 @@
 
 function read(name: string, fallback = ""): string {
   const value = process.env[name] ?? fallback;
-  if (!value && !fallback && process.env.NODE_ENV !== "test") {
-    // Log a warning but don't crash — allows build without all vars set.
+  if (!value && !fallback && process.env.NODE_ENV !== "test" && typeof window === "undefined") {
     console.warn(`[env] Missing environment variable: ${name}`);
   }
   return value;
