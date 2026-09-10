@@ -14,9 +14,9 @@ import { createClient } from "@supabase/supabase-js";
 import { env } from "@/config/env";
 
 export function createSupabaseAdminClient() {
-  if (!env.supabase.serviceRoleKey) {
+  if (!env.supabase.serviceRoleKey || !env.supabase.url) {
     throw new Error(
-      "SUPABASE_SERVICE_ROLE_KEY is not set. Admin client requires the service role key.",
+      "SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_URL is not set. Admin client requires both.",
     );
   }
 

@@ -36,48 +36,50 @@ export async function middleware(request: NextRequest) {
   const response = intlMiddleware(request);
 
   // Step 2: Refresh Supabase session cookies
-  const supabase = createServerClient(
-    env.supabase.url,
-    env.supabase.anonKey,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            response.cookies.set(name, value, options);
-          });
+  if (env.supabase.url && env.supabase.anonKey) {
+    const supabase = createServerClient(
+      env.supabase.url,
+      env.supabase.anonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              request.cookies.set(name, value);
+              response.cookies.set(name, value, options);
+            });
+          },
         },
       },
-    },
-  );
+    );
 
-  // `getUser` validates the session against Supabase Auth, unlike `getSession`
-  // which only decodes the cookie. This prevents trivial cookie tampering.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    // `getUser` validates the session against Supabase Auth, unlike `getSession`
+    // which only decodes the cookie. This prevents trivial cookie tampering.
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  // Step 3: Soft redirect for unauthenticated visitors to /<locale>/admin/*
-  // The pathname is already locale-prefixed by next-intl.
-  if (!user) {
-    const segments = pathname.split("/").filter(Boolean);
-    const first = segments[0] ?? "";
-    const isLocale = (siteConfig.locales as readonly string[]).includes(first);
-    const rest = isLocale ? segments.slice(1) : segments;
-    if (rest[0] === PROTECTED_PREFIX.slice(1)) {
-      const locale = isLocale ? first : siteConfig.defaultLocale;
-      const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = `/${locale}/login`;
-      loginUrl.searchParams.set("next", pathname);
-      const redirectResponse = NextResponse.redirect(loginUrl);
-      // Carry over any cookies set by the session refresh above
-      response.cookies.getAll().forEach((cookie) => {
-        redirectResponse.cookies.set(cookie);
-      });
-      return redirectResponse;
+    // Step 3: Soft redirect for unauthenticated visitors to /<locale>/admin/*
+    // The pathname is already locale-prefixed by next-intl.
+    if (!user) {
+      const segments = pathname.split("/").filter(Boolean);
+      const first = segments[0] ?? "";
+      const isLocale = (siteConfig.locales as readonly string[]).includes(first);
+      const rest = isLocale ? segments.slice(1) : segments;
+      if (rest[0] === PROTECTED_PREFIX.slice(1)) {
+        const locale = isLocale ? first : siteConfig.defaultLocale;
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = `/${locale}/login`;
+        loginUrl.searchParams.set("next", pathname);
+        const redirectResponse = NextResponse.redirect(loginUrl);
+        // Carry over any cookies set by the session refresh above
+        response.cookies.getAll().forEach((cookie) => {
+          redirectResponse.cookies.set(cookie);
+        });
+        return redirectResponse;
+      }
     }
   }
 

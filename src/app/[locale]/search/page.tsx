@@ -5,6 +5,8 @@ import { NewsFeed } from "@/components/news/news-feed";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SearchX } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function SearchPage({
   params,
   searchParams,

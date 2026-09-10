@@ -6,6 +6,8 @@ import { ArticleEditor } from "@/features/editorial/article-editor";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewPostPage({
   params,
 }: {

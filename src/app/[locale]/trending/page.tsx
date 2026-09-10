@@ -4,6 +4,8 @@ import { getTrendingArticles } from "@/features/news/data-access";
 import { TrendingList } from "@/components/news/trending-list";
 import { NewsFeed } from "@/components/news/news-feed";
 
+export const dynamic = "force-dynamic";
+
 export default async function TrendingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations("trending");

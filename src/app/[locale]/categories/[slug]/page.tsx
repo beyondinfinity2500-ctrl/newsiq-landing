@@ -7,6 +7,8 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { Package } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
 }

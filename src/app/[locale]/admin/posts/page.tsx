@@ -13,6 +13,8 @@ import { Plus, Pencil, Eye, Send, X, Check, FileText, Archive } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+export const dynamic = "force-dynamic";
+
 const statusStyles: Record<string, string> = {
   draft: "bg-muted text-muted-foreground",
   pending_review: "bg-warning/15 text-warning",

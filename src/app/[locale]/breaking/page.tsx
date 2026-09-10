@@ -4,6 +4,8 @@ import { getBreakingArticles } from "@/features/news/data-access";
 import { BreakingBanner } from "@/components/news/breaking-banner";
 import { NewsFeed } from "@/components/news/news-feed";
 
+export const dynamic = "force-dynamic";
+
 export default async function BreakingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations("home");

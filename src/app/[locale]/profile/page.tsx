@@ -5,6 +5,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ProfileForm } from "@/features/auth/profile-form";
 import type { Profile } from "@/lib/supabase/types";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Profile",
   robots: { index: false, follow: false },
