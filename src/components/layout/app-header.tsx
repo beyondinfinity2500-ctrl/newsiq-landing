@@ -43,7 +43,7 @@ const LanguageDropdown = ({ setLangOpen }: { setLangOpen: (v: boolean) => void }
         <Link
           key={lang.code}
           href={`/${lang.code}`}
-          onMouseDown={() => setLangOpen(false)}
+          onClick={() => setLangOpen(false)}
           className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
           role="option"
         >
@@ -158,16 +158,16 @@ export function AppHeader() {
       {mobileOpen && (
         <nav ref={mobileRef} id="mobile-navigation" className="border-t border-border/70 bg-background px-4 py-3 md:hidden" aria-label="Mobile navigation">
           <div className="grid gap-0.5">
-            <button type="button" onMouseDown={() => setLive(v => !v)} className="live-toggle justify-start px-3 py-2.5" aria-pressed={live}>
+            <button type="button" onClick={() => setLive(v => !v)} className="live-toggle justify-start px-3 py-2.5" aria-pressed={live}>
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live updates on' : 'Live updates paused'}
             </button>
-            <Link href={`/${locale}`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
-            <Link href={`/${locale}/about`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
-            <Link href={`/${locale}/trending`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href={`/${locale}/markets`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
-            <Link href={`/${locale}/terms`} onMouseDown={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
-            <Link href={`/${locale}/subscribe`} onMouseDown={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
+            <Link href={`/${locale}`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
+            <Link href={`/${locale}/about`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
+            <Link href={`/${locale}/trending`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
+            <Link href={`/${locale}/markets`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href={`/${locale}/terms`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
+            <Link href={`/${locale}/subscribe`} onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
           </div>
         </nav>
       )}
