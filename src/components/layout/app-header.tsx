@@ -37,18 +37,17 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
 )
 
 const LanguageDropdown = ({ setLangOpen }: { setLangOpen: (v: boolean) => void }) => (
-  <div className="absolute right-0 top-full z-[100] mt-1 w-52 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
+  <div className="absolute right-0 top-full z-[100] mt-1 w-44 rounded-xl border border-border bg-background shadow-xl" role="listbox" aria-label="Languages">
     <div className="max-h-72 overflow-y-auto p-1.5">
       {languages.map((lang) => (
         <Link
           key={lang.code}
           href={`/${lang.code}`}
           onClick={() => setLangOpen(false)}
-          className="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
+          className="block rounded-lg px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-secondary"
           role="option"
         >
-          <span className="text-foreground">{lang.native}</span>
-          <span className="text-[10px] text-muted-foreground">{lang.name}</span>
+          {lang.native}
         </Link>
       ))}
     </div>
