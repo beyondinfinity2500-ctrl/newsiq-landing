@@ -85,7 +85,6 @@ export default function HomeClient({ locale }: { locale: string }) {
   return (
     <main id="top" className="min-h-screen bg-background text-foreground">
       <div className="page-grid" aria-hidden="true" />
-      <AppHeader />
 
       <div className="relative z-10 mx-auto grid max-w-7xl lg:grid-cols-[210px_minmax(0,680px)_280px]">
         {/* Left sidebar - category filters */}
@@ -330,8 +329,6 @@ export default function HomeClient({ locale }: { locale: string }) {
           </div>
         </aside>
       </div>
-
-      <AppFooter />
     </main>
   )
 }

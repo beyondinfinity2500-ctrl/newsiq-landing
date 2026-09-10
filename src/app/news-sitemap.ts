@@ -4,8 +4,7 @@ import { siteConfig } from "@/config/site";
 
 const MAX_URLS = 5000;
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = siteConfig.url;
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Google News Sitemap format with <news:news> tags
@@ -26,25 +25,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
         id: string;
         published_at: string | null;
         cover_image_url: string | null;
-        post_translations: Array<{ locale: string; slug: string }>;
+        post_translations: Array<{ locale: string; slug: string; translation_status: string }>;
       }>) {
         // Add each translation as a separate news entry
         for (const tr of row.post_translations) {
           // Only include if translation status is published or completed
           if (tr.translation_status === "published" || tr.translation_status === "completed") {
             newsEntries.push({
-              url: `${siteConfig.url}/${tr.locale}/${`news/${tr.slug}`}`,
+              url: `${siteConfig.url}/${tr.locale}/news/${tr.slug}`,
               lastModified: row.published_at ? new Date(row.published_at) : now,
               changeFrequency: "daily",
               priority: 0.8,
               images: row.cover_image_url ? [row.cover_image_url] : undefined,
-              // Google News required fields
-              news: {
-                publication_name: "NewsIQ",
-                publication_type: "online_news",
-                title: tr.title,
-                keywords: tr.seo_title || tr.title,
-              },
             });
           }
         }
