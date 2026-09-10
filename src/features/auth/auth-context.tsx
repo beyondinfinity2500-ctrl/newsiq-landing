@@ -1,15 +1,10 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import type { Session, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import type { Profile, UserRole } from "@/lib/supabase/types";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-// Check if Supabase is available by creating the client
-const supabaseClient = createSupabaseBrowserClient();
-const isSupabaseAvailable = supabaseClient !== null;
-
-// Type for auth state including refresh function
 interface AuthState {
   user: User | null;
   profile: Profile | null;
@@ -18,16 +13,13 @@ interface AuthState {
   refresh: () => Promise<void>;
 }
 
-// Fallback context when Supabase is not available
-const fallbackAuthContext = {
+const fallbackAuthContext: AuthState = {
   user: null,
   profile: null,
-  role: "visitor" as UserRole,
+  role: "visitor",
   loading: true,
   refresh: async () => {},
 };
-
-const AuthContext = createContext<AuthContextValue>(fallbackAuthContext);
 
 export interface AuthContextValue {
   user: User | null;
@@ -37,29 +29,19 @@ export interface AuthContextValue {
   refresh: () => Promise<void>;
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  // Initial state based on Supabase availability
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    profile: null,
-    role: isSupabaseAvailable ? "visitor" as UserRole : "visitor" as UserRole,
-    loading: !isSupabaseAvailable,
-    refresh: async () => {},
-  });
+const AuthContext = createContext<AuthContextValue>(fallbackAuthContext);
 
-  const refresh = async () => {
-    setState({
-      user: null,
-      profile: null,
-      role: "visitor" as UserRole,
-      loading: !isSupabaseAvailable,
-      refresh: async () => {},
-    });
-  };
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<AuthState>(fallbackAuthContext);
 
   useEffect(() => {
-    void refresh();
-  }, [isSupabaseAvailable]);
+    const client = createSupabaseBrowserClient();
+    if (!client) {
+      setState({ user: null, profile: null, role: "visitor", loading: false, refresh: async () => {} });
+      return;
+    }
+    setState((prev) => ({ ...prev, loading: false }));
+  }, []);
 
   return (
     <AuthContext.Provider value={state}>
