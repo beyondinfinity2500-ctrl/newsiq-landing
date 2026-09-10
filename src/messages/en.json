@@ -534,6 +534,7 @@
       { "q": "What is the difference between Free and Pro?", "a": "Free shows you the news and a short AI preview. Pro unlocks the full structured breakdown: which markets, in which direction, with what strength and time horizon, plus the key risks and opportunities." },
       { "q": "Do you offer team or enterprise plans?", "a": "Yes. The Team plan includes API access, alerting, and custom source ingestion. Email advertising@newsiq.top for a quote." }
     ],
-    "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement."
+    "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement.",
+    "subscribeButton": "Subscribe"
   }
 }

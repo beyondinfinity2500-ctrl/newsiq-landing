@@ -549,6 +549,7 @@
         "a": "Yes. The Team plan includes API access, alerting, and custom source ingestion. Email advertising@newsiq.top for a quote."
       }
     ],
-    "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement."
+    "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement.",
+    "subscribeButton": "Abonnieren"
   }
 }
