@@ -1,0 +1,7 @@
+.next/cache
+node_modules
+.env*
+.git
+.opencode/
+graphify-out/
+*.md
