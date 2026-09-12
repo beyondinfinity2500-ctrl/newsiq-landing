@@ -30,7 +30,7 @@ export function StaticPageShell({ locale, title, subtitle, children, meta, relat
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 lg:px-6">
       <Link
-        href={`/${locale}`}
+        href="/"
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowRight className="size-4 rtl:rotate-180" aria-hidden="true" />
