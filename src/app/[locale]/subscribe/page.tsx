@@ -31,12 +31,17 @@ const PAYMENT_METHODS = [
 ];
 
 const FAQ_ITEMS: Array<{ q: string; a: string }> = [
-  { q: "Can I cancel anytime?", a: "Yes. Monthly and yearly plans can be cancelled from your account page at any time. You keep access until the end of the current billing period." },
-  { q: "Do you offer student discounts?", a: "Yes. Email press@newsiq.top with a valid academic email and we will send a discount code." },
+  { q: "What are AI Analysis Credits?", a: "Each credit unlocks one full AI-generated market impact analysis for a news story. Credits reset monthly and do not roll over." },
+  { q: "Can I cancel anytime?", a: "Yes. Monthly plans can be cancelled from your account page at any time. You keep access until the end of the current billing period." },
+  { q: "What happens when I run out of credits?", a: "You can still read all news stories. To unlock AI Analysis for additional stories, upgrade to a higher tier or wait for your credits to reset next month." },
   { q: "Is my payment information secure?", a: "Payments are processed by a third-party provider. NewsIQ never sees or stores your card number." },
-  { q: "What is the difference between Free and Pro?", a: "Free shows you the news and a short AI preview. Pro unlocks the full structured breakdown: which markets, in which direction, with what strength and time horizon, plus the key risks and opportunities." },
-  { q: "Do you offer team or enterprise plans?", a: "Yes. The Team plan includes API access, alerting, and custom source ingestion. Email advertising@newsiq.top for a quote." },
+  { q: "What is the difference between the plans?", a: "AI Analysis — 30 gives you 30 credits per month. AI Analysis — 300 gives you 300 credits. Premium gives you unlimited AI Analysis with priority queue and early access to new features." },
 ];
+
+function formatPrice(priceInCents: number): string {
+  const dollars = priceInCents / 100
+  return dollars % 1 === 0 ? `$${dollars}` : `$${dollars.toFixed(2)}`
+}
 
 export default async function SubscribePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -55,26 +60,24 @@ export default async function SubscribePage({ params }: { params: Promise<{ loca
           <p className="mx-auto mt-5 max-w-xl text-pretty text-sm leading-6 text-muted-foreground sm:text-base">{t("subtitle")}</p>
         </div>
 
-        <div className="mx-auto mt-10 grid max-w-6xl gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {PRODUCTS.map((product, index) => {
-            const isAnnual = product.id === "unlimited-annual";
-            const isRecommended = index === 2;
-            const cardClass = isAnnual
-              ? "pricing-card-annual border-amber-300/70 bg-[linear-gradient(145deg,hsl(42_96%_56%/.16),hsl(var(--card)/.94)_54%)] shadow-[0_20px_70px_hsl(42_96%_56%/.16)]"
-              : isRecommended
-                ? "pricing-card-featured border-primary/70 bg-primary/[0.06] shadow-[0_20px_70px_hsl(var(--primary)/.12)]"
-                : "border-border bg-card/70";
+        <div className="mx-auto mt-12 grid max-w-4xl gap-5 md:grid-cols-3">
+          {PRODUCTS.map((product) => {
+            const isFeatured = product.isPremium
+            const cardClass = isFeatured
+              ? "pricing-card-featured border-primary/70 bg-primary/[0.06] shadow-[0_20px_70px_hsl(var(--primary)/.12)]"
+              : "border-border bg-card/70";
 
             return (
               <article className={`pricing-card relative flex flex-col overflow-hidden rounded-xl border p-6 sm:p-7 ${cardClass}`} key={product.id}>
-                {isAnnual && <span className="pricing-ribbon" aria-label="Best annual value">Best value</span>}
-                {isRecommended && <span className="pricing-badge absolute right-4 top-4 rounded-full bg-primary px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-primary-foreground">Recommended</span>}
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">{product.interval === "year" ? "Annual" : "Monthly"}</p>
+                {isFeatured && <span className="pricing-badge absolute right-4 top-4 rounded-full bg-primary px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-primary-foreground">Recommended</span>}
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">{product.interval}</p>
                 <h2 className="mt-4 text-xl font-semibold tracking-[-0.03em]">{product.name}</h2>
                 <p className="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">{product.description}</p>
-                <p className="mt-7 text-4xl font-semibold tracking-[-0.05em]">${(product.priceInCents / 100).toFixed(product.priceInCents < 1000 ? 2 : 0)} <span className="text-sm font-normal text-muted-foreground">/ {product.interval}</span></p>
+                <p className="mt-7 text-4xl font-semibold tracking-[-0.05em]">{formatPrice(product.priceInCents)} <span className="text-sm font-normal text-muted-foreground">/ {product.interval}</span></p>
                 <ul className="mt-7 grid flex-1 content-start gap-3 text-sm text-muted-foreground">
-                  <li className="flex gap-2"><span className="text-primary">✓</span>{product.access}</li>
+                  {product.features.map((feature) => (
+                    <li className="flex gap-2" key={feature}><span className="text-primary">✓</span>{feature}</li>
+                  ))}
                 </ul>
                 <div className="mt-8">
                   <Link

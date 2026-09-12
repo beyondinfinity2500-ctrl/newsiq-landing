@@ -4,41 +4,59 @@ export type Product = {
   description: string
   priceInCents: number
   interval: 'month' | 'year'
-  access: string
+  credits: number | null
+  isPremium: boolean
+  features: string[]
 }
 
 export const PRODUCTS: Product[] = [
   {
-    id: 'short-news-monthly',
-    name: 'Short News',
-    description: 'All short news, plus the first daily financial analysis.',
-    priceInCents: 99,
+    id: 'ai-analysis-30',
+    name: 'AI Analysis — 30',
+    description: '30 AI Analysis Credits per month. Unlock structured market impact breakdowns for the stories that matter.',
+    priceInCents: 100,
     interval: 'month',
-    access: 'All Short News + first daily analysis',
+    credits: 30,
+    isPremium: false,
+    features: [
+      '30 AI Analysis Credits / month',
+      'Full market impact breakdown',
+      'Affected assets & direction',
+      'Risk & opportunity analysis',
+    ],
   },
   {
-    id: 'ten-news-monthly',
-    name: 'Daily Ten',
-    description: 'Access to ten news stories each day.',
-    priceInCents: 500,
+    id: 'ai-analysis-300',
+    name: 'AI Analysis — 300',
+    description: '300 AI Analysis Credits per month. For readers who follow every move.',
+    priceInCents: 1000,
     interval: 'month',
-    access: '10 news stories per day',
+    credits: 300,
+    isPremium: false,
+    features: [
+      '300 AI Analysis Credits / month',
+      'Full market impact breakdown',
+      'Affected assets & direction',
+      'Risk & opportunity analysis',
+      'Priority analysis queue',
+    ],
   },
   {
-    id: 'unlimited-monthly',
-    name: 'Unlimited Monthly',
-    description: 'Unlimited access to every story and analysis.',
-    priceInCents: 1900,
+    id: 'premium',
+    name: 'Premium',
+    description: 'Unlimited AI Analysis. The complete NewsIQ intelligence layer.',
+    priceInCents: 5000,
     interval: 'month',
-    access: 'Unlimited news and analysis',
-  },
-  {
-    id: 'unlimited-annual',
-    name: 'Unlimited Annual',
-    description: 'One year of unlimited news and analysis.',
-    priceInCents: 9900,
-    interval: 'year',
-    access: 'Unlimited Everything for one year',
+    credits: null,
+    isPremium: true,
+    features: [
+      'Unlimited AI Analysis',
+      'Full market impact breakdown',
+      'Affected assets & direction',
+      'Risk & opportunity analysis',
+      'Priority analysis queue',
+      'Early access to new features',
+    ],
   },
 ]
 

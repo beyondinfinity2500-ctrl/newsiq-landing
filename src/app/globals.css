@@ -56,37 +56,37 @@
 
 /* ── NewsIQ Dark Theme (newsiq3 style) ─────────────────── */
 :root {
-  --background: 222 32% 7%;
-  --foreground: 210 24% 96%;
-  --card: 222 29% 10%;
-  --card-foreground: 210 24% 96%;
-  --primary: 187 88% 48%;
-  --primary-foreground: 222 40% 8%;
-  --secondary: 221 24% 14%;
-  --muted-foreground: 215 16% 62%;
-  --border: 219 20% 20%;
+  --background: hsl(222 32% 7%);
+  --foreground: hsl(210 24% 96%);
+  --card: hsl(222 29% 10%);
+  --card-foreground: hsl(210 24% 96%);
+  --primary: hsl(187 88% 48%);
+  --primary-foreground: hsl(222 40% 8%);
+  --secondary: hsl(221 24% 14%);
+  --muted-foreground: hsl(215 16% 62%);
+  --border: hsl(219 20% 20%);
   --radius: 0.5rem;
-  --muted: 221 24% 14%;
-  --accent: 221 24% 14%;
-  --accent-foreground: 210 24% 96%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 210 24% 96%;
-  --success: 142 71% 45%;
-  --success-foreground: 222 40% 8%;
-  --warning: 42 96% 56%;
-  --warning-foreground: 222 40% 8%;
-  --info: 187 88% 48%;
-  --info-foreground: 222 40% 8%;
-  --ring: 187 88% 48%;
-  --input: 219 20% 20%;
+  --muted: hsl(221 24% 14%);
+  --accent: hsl(221 24% 14%);
+  --accent-foreground: hsl(210 24% 96%);
+  --destructive: hsl(0 72% 51%);
+  --destructive-foreground: hsl(210 24% 96%);
+  --success: hsl(142 71% 45%);
+  --success-foreground: hsl(222 40% 8%);
+  --warning: hsl(42 96% 56%);
+  --warning-foreground: hsl(222 40% 8%);
+  --info: hsl(187 88% 48%);
+  --info-foreground: hsl(222 40% 8%);
+  --ring: hsl(187 88% 48%);
+  --input: hsl(219 20% 20%);
 }
 
 @layer base {
-  * { border-color: hsl(var(--border)); }
-  html { background: hsl(var(--background)); scroll-behavior: smooth; }
+  * { border-color: var(--border); }
+  html { background: var(--background); scroll-behavior: smooth; }
   body {
-    background: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background: var(--background);
+    color: var(--foreground);
     font-family: Arial, sans-serif;
   }
   html[dir="rtl"] {
@@ -94,17 +94,17 @@
   }
 }
 
-/* ── Utility overrides ──────────────────────────────────── */
-.bg-background { background-color: hsl(var(--background)); }
-.text-foreground { color: hsl(var(--foreground)); }
-.bg-card { background-color: hsl(var(--card)); }
-.bg-secondary { background-color: hsl(var(--secondary)); }
-.text-primary { color: hsl(var(--primary)); }
-.text-primary-foreground { color: hsl(var(--primary-foreground)); }
-.border-border { border-color: hsl(var(--border)); }
-.text-muted-foreground { color: hsl(var(--muted-foreground)); }
-.selection\:bg-primary::selection { background-color: hsl(var(--primary)); }
-.selection\:text-primary-foreground::selection { color: hsl(var(--primary-foreground)); }
+/* ── Utility overrides (variables now contain valid hsl()) ── */
+.bg-background { background-color: var(--background); }
+.text-foreground { color: var(--foreground); }
+.bg-card { background-color: var(--card); }
+.bg-secondary { background-color: var(--secondary); }
+.text-primary { color: var(--primary); }
+.text-primary-foreground { color: var(--primary-foreground); }
+.border-border { border-color: var(--border); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.selection\:bg-primary::selection { background-color: var(--primary); }
+.selection\:text-primary-foreground::selection { color: var(--primary-foreground); }
 
 /* ── NewsIQ custom classes (newsiq3 style) ─────────────── */
 .page-grid {
@@ -112,8 +112,8 @@
   inset: 0;
   pointer-events: none;
   opacity: .24;
-  background-image: linear-gradient(hsl(var(--border) / .35) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--border) / .35) 1px, transparent 1px);
+  background-image: linear-gradient(color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: linear-gradient(to bottom, black, transparent 80%);
 }
@@ -121,7 +121,7 @@
 .niq-mascot {
   position: relative;
   flex: 0 0 auto;
-  filter: drop-shadow(0 5px 8px hsl(var(--primary) / .16));
+  filter: drop-shadow(0 5px 8px color-mix(in srgb, var(--primary) 16%, transparent));
   animation: niq-float 4s ease-in-out infinite;
 }
 .niq-antenna {
@@ -130,7 +130,7 @@
   top: 0;
   width: 2px;
   height: 9px;
-  background: hsl(var(--muted-foreground));
+  background: var(--muted-foreground);
   transform: translateX(-50%);
 }
 .niq-antenna::before {
@@ -140,8 +140,8 @@
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: hsl(var(--primary));
-  box-shadow: 0 0 8px hsl(var(--primary));
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
   content: '';
   transform: translateX(-50%);
 }
@@ -152,9 +152,9 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border: 2px solid hsl(var(--foreground) / .88);
+  border: 2px solid color-mix(in srgb, var(--foreground) 88%, transparent);
   border-radius: 13px;
-  background: hsl(var(--card));
+  background: var(--card);
 }
 .niq-eye {
   position: relative;
@@ -162,7 +162,7 @@
   width: 9px;
   height: 11px;
   border-radius: 50%;
-  background: hsl(var(--foreground));
+  background: var(--foreground);
   transform: rotate(-3deg);
 }
 .niq-eye-right { transform: rotate(3deg); }
@@ -173,7 +173,7 @@
   width: 3px;
   height: 3px;
   border-radius: 999px;
-  background: hsl(var(--primary-foreground));
+  background: var(--primary-foreground);
 }
 .niq-cheek {
   position: absolute;
@@ -182,7 +182,7 @@
   width: 3px;
   height: 3px;
   border-radius: 999px;
-  background: hsl(var(--primary));
+  background: var(--primary);
   opacity: .8;
 }
 .niq-chest {
@@ -193,9 +193,9 @@
   width: 15px;
   height: 9px;
   place-items: center;
-  border: 1px solid hsl(var(--primary));
+  border: 1px solid var(--primary);
   border-radius: 3px;
-  color: hsl(var(--primary));
+  color: var(--primary);
   font: 700 7px ui-monospace, monospace;
   transform: translateX(-50%);
 }
@@ -209,28 +209,28 @@
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: hsl(var(--primary));
-  box-shadow: 0 0 10px hsl(var(--primary));
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
 }
 .live-dot-off {
-  background: hsl(var(--muted-foreground));
+  background: var(--muted-foreground);
   box-shadow: none;
 }
 
 .signal-panel {
   overflow: hidden;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background: linear-gradient(145deg, hsl(var(--card) / .98), hsl(222 28% 8% / .88));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--card) 98%, transparent), hsl(222 28% 8% / .88));
   box-shadow: 0 25px 80px hsl(222 80% 3% / .45);
 }
 
 @media (max-width: 640px) { .page-grid { opacity: .12; background-size: 44px 44px; } }
 
 .stat-card, .method-card {
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: hsl(var(--card) / .7);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
   padding: 20px;
 }
 .method-card {
@@ -238,7 +238,7 @@
   transition: border-color .2s ease, transform .2s ease;
 }
 .method-card:hover {
-  border-color: hsl(var(--primary) / .6);
+  border-color: color-mix(in srgb, var(--primary) 60%, transparent);
   transform: translateY(-3px);
 }
 
@@ -250,23 +250,23 @@
   align-items: center;
   gap: 7px;
   min-height: 30px;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 5px 10px;
   font-size: 10px;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 .market-symbol > span:first-child {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 11px;
   font-weight: 700;
 }
 .market-symbol-bitcoin {
-  border-color: hsl(var(--primary) / .55);
+  border-color: color-mix(in srgb, var(--primary) 55%, transparent);
 }
 .market-symbol-bitcoin > span:first-child {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .payment-mark {
@@ -275,9 +275,9 @@
   min-width: 58px;
   align-items: center;
   justify-content: center;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: hsl(var(--foreground));
+  background: var(--foreground);
   padding: 6px 9px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
@@ -297,14 +297,14 @@
 }
 .pricing-card:hover, .pricing-card:focus-within {
   transform: translateY(-4px);
-  border-color: hsl(var(--primary) / .55);
-  box-shadow: 0 16px 42px hsl(var(--foreground) / .08);
+  border-color: color-mix(in srgb, var(--primary) 55%, transparent);
+  box-shadow: 0 16px 42px color-mix(in srgb, var(--foreground) 8%, transparent);
 }
 .pricing-card-featured {
-  background-image: linear-gradient(145deg, hsl(var(--primary) / .12), transparent 48%);
+  background-image: linear-gradient(145deg, color-mix(in srgb, var(--primary) 12%, transparent), transparent 48%);
 }
 .pricing-badge {
-  box-shadow: 0 0 0 3px hsl(var(--primary) / .12), 0 8px 22px hsl(var(--primary) / .2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent), 0 8px 22px color-mix(in srgb, var(--primary) 20%, transparent);
 }
 .pricing-card-annual { isolation: isolate; }
 .pricing-card-annual .pricing-ribbon {
@@ -328,7 +328,7 @@
 .pricing-card-annual .text-primary { color: hsl(42 96% 56%); }
 
 .payment-strip {
-  background-image: linear-gradient(110deg, hsl(var(--card)), hsl(var(--primary) / .06), hsl(var(--card)));
+  background-image: linear-gradient(110deg, var(--card), color-mix(in srgb, var(--primary) 6%, transparent), var(--card));
   background-size: 220% 100%;
   animation: payment-shimmer 8s ease-in-out infinite;
 }
@@ -339,7 +339,7 @@
   justify-content: center;
   border-radius: 7px;
   padding: 10px 16px;
-  background: hsl(var(--background));
+  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: 800;
@@ -348,7 +348,7 @@
 }
 .checkout-brand:hover, .checkout-brand:focus-visible {
   transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 22px hsl(var(--foreground) / .12);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--foreground) 12%, transparent);
 }
 .checkout-paypal { color: #173f8a; }
 .checkout-visa { color: #1a4aa1; font-style: italic; }
@@ -364,6 +364,11 @@
   .pricing-card, .checkout-brand, .payment-strip { animation: none; transition: none; }
 }
 
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .field-label {
   display: block;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -371,24 +376,24 @@
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 .field-input {
   width: 100%;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: hsl(var(--background));
+  background: var(--background);
   padding: 11px 12px;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   font-size: 13px;
   outline: none;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 .field-input:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsl(var(--primary) / .12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
 }
-.field-input::placeholder { color: hsl(var(--muted-foreground) / .7); }
+.field-input::placeholder { color: color-mix(in srgb, var(--muted-foreground) 70%, transparent); }
 
 .menu-button {
   display: grid;
@@ -396,9 +401,9 @@
   height: 36px;
   place-content: center;
   gap: 4px;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 6px;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 .menu-button span { display: block; width: 15px; height: 1px; background: currentColor; }
 
@@ -406,7 +411,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 9px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -414,18 +419,18 @@
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   transition: border-color .2s ease, color .2s ease;
 }
 .live-toggle:hover {
-  border-color: hsl(var(--primary));
-  color: hsl(var(--foreground));
+  border-color: var(--primary);
+  color: var(--foreground);
 }
 
 .menu-button:focus-visible,
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid hsl(var(--primary));
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -444,5 +449,7 @@ a:focus-visible {
   *, *::before, *::after {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { formatRelativeTime } from '@/lib/utils'
 import type { ArticleWithDetails } from '@/features/news/data-access'
 import { FEED_IMAGE_SIZES } from '@/lib/image/variants'
@@ -29,26 +30,38 @@ type NewsFilter = 'Live feed' | 'Markets' | 'Geopolitics' | 'Technology'
 
 const newsFilters: NewsFilter[] = ['Live feed', 'Markets', 'Geopolitics', 'Technology']
 
-/* ── Compact Market Strip ─────────────────────────────────── */
+/* ── Premium Market Ticker ───────────────────────────────── */
 
-interface MarketStripItem {
+interface MarketTickerItem {
   symbol: string
   label: string
+  decimals: number
+  prefix: string
 }
 
-const marketStripAssets: MarketStripItem[] = [
-  { symbol: 'GOLD', label: 'Gold' },
-  { symbol: 'WTI', label: 'Oil' },
-  { symbol: 'BTC', label: 'BTC' },
-  { symbol: 'SPX', label: 'S&P 500' },
-  { symbol: 'EURUSD', label: 'EUR/USD' },
+const TICKER_ASSETS: MarketTickerItem[] = [
+  { symbol: 'GOLD', label: 'Gold', decimals: 2, prefix: '$' },
+  { symbol: 'BTC', label: 'Bitcoin', decimals: 0, prefix: '$' },
+  { symbol: 'WTI', label: 'Oil', decimals: 2, prefix: '$' },
+  { symbol: 'SPX', label: 'S&P 500', decimals: 2, prefix: '' },
+  { symbol: 'EURUSD', label: 'EUR/USD', decimals: 4, prefix: '' },
 ]
+
+function formatTickerPrice(price: number, decimals: number, prefix: string): string {
+  if (prefix === '$') {
+    return `$${price.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`
+  }
+  return price.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+}
 
 function MarketStrip() {
   const [quotes, setQuotes] = useState<Record<string, { price: number; changePercent: number }>>({})
+  const pathname = usePathname()
+  const locale = pathname?.split('/')?.[1] || 'en'
+  const marketsHref = `/${locale}/markets`
 
   useEffect(() => {
-    const symbols = marketStripAssets.map((a) => a.symbol).join(',')
+    const symbols = TICKER_ASSETS.map((a) => a.symbol).join(',')
     fetch(`/api/markets?symbols=${symbols}`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((data) => {
@@ -65,34 +78,75 @@ function MarketStrip() {
       .catch(() => {})
   }, [])
 
+  type TickerDirection = 'up' | 'down' | 'unchanged' | null
+
+  const items: (MarketTickerItem & { price?: number; direction: TickerDirection })[] = TICKER_ASSETS.map((asset) => {
+    const q = quotes[asset.symbol]
+    const direction: TickerDirection = q ? (q.changePercent > 0 ? 'up' : q.changePercent < 0 ? 'down' : 'unchanged') : null
+    return { ...asset, price: q?.price, direction }
+  })
+
+  function itemAriaLabel(item: { label: string; price?: number; direction: 'up' | 'down' | 'unchanged' | null; prefix: string; decimals: number }): string {
+    if (item.price == null) return `${item.label}, price unavailable`
+    const formatted = formatTickerPrice(item.price, item.decimals, item.prefix)
+    const dir = item.direction === 'up' ? ', higher than previous reference'
+      : item.direction === 'down' ? ', lower than previous reference'
+      : ''
+    return `${item.label}, current price ${formatted}${dir}`
+  }
+
+  const tickerContent = (
+    <div className="flex shrink-0 items-center gap-5 whitespace-nowrap" aria-hidden="true">
+      {items.map((item, i) => (
+        <span key={item.symbol} className="flex shrink-0 items-center gap-1.5">
+          <span className="font-mono text-[9px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+            {item.label}
+          </span>
+          {item.price != null ? (
+            <span
+              className="font-mono text-[11px] font-semibold"
+              style={{
+                color: item.direction === 'up'
+                  ? 'hsl(142 71% 45%)'
+                  : item.direction === 'down'
+                    ? 'hsl(0 72% 51%)'
+                    : undefined,
+              }}
+            >
+              {formatTickerPrice(item.price, item.decimals, item.prefix)}
+            </span>
+          ) : (
+            <span className="font-mono text-[11px] text-muted-foreground/40">--</span>
+          )}
+          {i < items.length - 1 && <span className="ml-3.5 h-3 w-px bg-border/40" aria-hidden="true" />}
+        </span>
+      ))}
+    </div>
+  )
+
+  const fullAriaLabel = items
+    .map((item) => itemAriaLabel(item))
+    .join('. ')
+
   return (
     <div className="border-b border-border/60 bg-card/30">
-      <div className="mx-auto flex max-w-7xl items-center gap-4 overflow-x-auto px-5 py-2.5 sm:px-8 scrollbar-none">
-        <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Markets</span>
-        <span className="h-3 w-px shrink-0 bg-border/60" aria-hidden="true" />
-        {marketStripAssets.map((asset) => {
-          const q = quotes[asset.symbol]
-          const isPositive = q ? q.changePercent >= 0 : null
-          return (
-            <div key={asset.symbol} className="flex shrink-0 items-center gap-2">
-              <span className="font-mono text-[10px] font-semibold text-foreground">{asset.label}</span>
-              {q ? (
-                <>
-                  <span className="font-mono text-[10px] text-muted-foreground">
-                    {asset.symbol === 'EURUSD' ? q.price.toFixed(4) : q.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                  <span className={`font-mono text-[10px] ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-                    {isPositive ? '+' : ''}{q.changePercent.toFixed(2)}%
-                  </span>
-                </>
-              ) : (
-                <span className="font-mono text-[10px] text-muted-foreground/50">--</span>
-              )}
-              {asset.symbol !== 'EURUSD' && <span className="h-3 w-px bg-border/40" aria-hidden="true" />}
-            </div>
-          )
-        })}
-      </div>
+      <a
+        href={marketsHref}
+        aria-label={`View live markets. ${fullAriaLabel}`}
+        className="mx-auto block max-w-7xl px-5 sm:px-8 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        {/* Mobile: marquee */}
+        <div className="overflow-hidden sm:hidden">
+          <div style={{ animation: 'ticker-scroll 28s linear infinite' }}>
+            {tickerContent}
+            {tickerContent}
+          </div>
+        </div>
+        {/* Desktop: static */}
+        <div className="hidden sm:flex">
+          {tickerContent}
+        </div>
+      </a>
     </div>
   )
 }
