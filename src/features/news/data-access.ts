@@ -2,8 +2,8 @@
  * News data-access layer — the ONLY module that touches posts/post_translations.
  *
  * Phase 6 additions:
- *   - `getArticleBySlug` now respects `translation_status` (only completed
- *     translations are exposed publicly; pending/failed/process fall back).
+ *   - `getArticleBySlug` now respects `translation_status` (only published
+ *     translations are exposed publicly; draft/reviewed fall back).
  *   - Returns `is_fallback: boolean` so the UI can show a banner indicating
  *     that the user is reading a translation, not the original.
  *   - Adds `getAvailableTranslations(slug)` so the article page can emit
@@ -30,7 +30,13 @@ export interface ArticleWithDetails extends Post {
   resolved_locale: string;
 }
 
-const PUBLIC_TRANSLATION_STATUSES = ["completed", "published"] as const;
+/**
+ * Public translation statuses. MUST match the Postgres enum
+ * `translation_status` = ('draft', 'reviewed', 'published') — filtering on
+ * a value that is not in the enum makes PostgREST return a 400 error,
+ * which silently empties the entire public feed.
+ */
+const PUBLIC_TRANSLATION_STATUSES = ["published"] as const;
 
 function isPublicTranslation(status: string | null | undefined): boolean {
   if (!status) return false;
@@ -78,12 +84,15 @@ export async function getArticleBySlug(
   locale: string,
 ): Promise<ArticleWithDetails> {
   // 1) Find the post_id behind this slug regardless of locale.
-  const { data: tr } = await client
+  //    Use .limit(1) NOT .maybeSingle() — multiple translations can share
+  //    the same slug (e.g. "demo-x" in both en and fa), and maybeSingle()
+  //    throws PGRST116 when 2+ rows match.
+  const { data: trRows } = await client
     .from("post_translations")
     .select("post_id, locale, translation_status, slug")
     .eq("slug", slug)
-    .maybeSingle();
-  const translation = tr as Pick<PostTranslation, "post_id" | "locale" | "translation_status" | "slug"> | null;
+    .limit(1);
+  const translation = (trRows?.[0] ?? null) as Pick<PostTranslation, "post_id" | "locale" | "translation_status" | "slug"> | null;
   if (!translation) throw new NotFoundError(`No article found for slug "${slug}"`);
 
   // 2) Try the requested locale first (must be public status).

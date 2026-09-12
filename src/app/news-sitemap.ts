@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .from("posts")
       .select("id, published_at, cover_image_url, post_translations!inner(locale, slug, translation_status)")
       .eq("status", "published")
-      .in("post_translations.translation_status", ["completed", "published"])
+      .in("post_translations.translation_status", ["published"])
       .order("published_at", { ascending: false })
       .limit(MAX_URLS);
 
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Add each translation as a separate news entry
         for (const tr of row.post_translations) {
           // Only include if translation status is published or completed
-          if (tr.translation_status === "published" || tr.translation_status === "completed") {
+          if (tr.translation_status === "published") {
             newsEntries.push({
               url: `${siteConfig.url}/${tr.locale}/news/${tr.slug}`,
               lastModified: row.published_at ? new Date(row.published_at) : now,

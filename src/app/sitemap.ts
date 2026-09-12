@@ -104,7 +104,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .from("posts")
       .select("id, published_at, cover_image_url, post_translations!inner(locale, slug, translation_status)")
       .eq("status", "published")
-      .in("post_translations.translation_status", ["completed", "published"])
+      .in("post_translations.translation_status", ["published"])
       .order("published_at", { ascending: false })
       .limit(MAX_URLS);
     if (!error && data) {

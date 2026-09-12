@@ -8,7 +8,7 @@
 
 export type UserRole = "visitor" | "user" | "pro" | "editor" | "admin" | "super_admin";
 
-export type PostStatus = "draft" | "pending_review" | "approved" | "published" | "rejected" | "archived";
+export type PostStatus = "suggested" | "draft" | "pending_review" | "approved" | "published" | "rejected" | "archived";
 
 export type VerificationStatus = "unverified" | "verified" | "disputed" | "developing" | "likely";
 
@@ -134,6 +134,7 @@ export interface Post {
   financial_assets: string[];
   hashtags: string[];
   cover_image_url: string | null;
+  image_status?: string;
   published_at: string | null;
   created_at: string;
   updated_at: string;

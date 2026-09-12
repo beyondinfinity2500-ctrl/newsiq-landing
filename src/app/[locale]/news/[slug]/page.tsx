@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -22,8 +23,10 @@ import { AdSlot } from "@/components/shared/ad-slot";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { AiAnalysisSection, type AiAnalysisPayload } from "@/components/ai/ai-analysis-section";
 import { formatRelativeTime } from "@/lib/utils";
+import { HERO_IMAGE_SIZES } from "@/lib/image/variants";
 import { ChevronRight, Clock, MapPin, Languages } from "lucide-react";
-import type { MarketImpactResult } from "@/lib/ai/types";
+import type { MarketImpactResult, MarketImpactAsset } from "@/lib/ai/types";
+import { isProUser } from "@/lib/security/authorization";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
@@ -53,6 +56,73 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+/**
+ * Normalize the raw database result into a MarketImpactResult or return null
+ * if the shape is incomplete. Prevents crashes from malformed/stale data.
+ */
+function normalizeMarketImpact(raw: Record<string, unknown> | null): MarketImpactResult | null {
+  if (!raw || typeof raw !== "object") return null;
+  const sentiment = raw.overallSentiment;
+  const assets = raw.affectedAssets;
+  if (
+    typeof sentiment !== "string" ||
+    !Array.isArray(assets) ||
+    typeof raw.confidence !== "number" ||
+    typeof raw.analysis !== "string"
+  ) {
+    return null;
+  }
+  const validSentiments = ["bullish", "bearish", "neutral"] as const;
+  if (!(validSentiments as readonly string[]).includes(sentiment)) return null;
+  const validAssets: MarketImpactAsset[] = assets
+    .filter(
+      (a): a is MarketImpactAsset =>
+        typeof a === "object" &&
+        a !== null &&
+        typeof (a as MarketImpactAsset).asset === "string" &&
+        typeof (a as MarketImpactAsset).direction === "string" &&
+        typeof (a as MarketImpactAsset).impactLevel === "string" &&
+        typeof (a as MarketImpactAsset).reasoning === "string",
+    );
+  if (validAssets.length === 0) return null;
+  return {
+    overallSentiment: sentiment as MarketImpactResult["overallSentiment"],
+    affectedAssets: validAssets,
+    confidence: raw.confidence as number,
+    analysis: raw.analysis as string,
+  };
+}
+
+/**
+ * Normalize the raw database analysis result into an AiAnalysisPayload or
+ * return null if the shape is incomplete. The AI analysis section requires
+ * at minimum: summary, why_it_matters, economic_impact, affected_assets,
+ * affected_sectors, geographic_impact, key_entities, time_horizon, confidence,
+ * risks, opportunities, uncertainty.
+ */
+function normalizeAiAnalysis(raw: Record<string, unknown> | null): AiAnalysisPayload | null {
+  if (!raw || typeof raw !== "object") return null;
+  const r = raw as Record<string, unknown>;
+  if (
+    typeof r.summary !== "string" ||
+    typeof r.why_it_matters !== "string" ||
+    typeof r.economic_impact !== "string" ||
+    !Array.isArray(r.affected_assets) ||
+    !Array.isArray(r.affected_sectors) ||
+    !Array.isArray(r.geographic_impact) ||
+    !Array.isArray(r.key_entities) ||
+    typeof r.time_horizon !== "string" ||
+    typeof r.confidence !== "string" ||
+    !Array.isArray(r.risks) ||
+    !Array.isArray(r.opportunities) ||
+    !r.uncertainty ||
+    typeof (r.uncertainty as Record<string, unknown>).reason !== "string"
+  ) {
+    return null;
+  }
+  return r as unknown as AiAnalysisPayload;
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
   const t = await getTranslations("article");
@@ -71,7 +141,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
     getAvailableTranslations(supabase, article.id),
     getLatestAnalysis(supabase, article.id),
   ]);
-  const marketImpact = impactResult as unknown as MarketImpactResult | null;
+  const marketImpact = normalizeMarketImpact(impactResult);
+  const normalizedAiAnalysis = normalizeAiAnalysis(aiAnalysis);
+  const userIsPro = await isProUser(supabase);
   const isUserReport = article.source_name === "User Report";
   const isDeveloping = article.verification_status === "developing";
 
@@ -161,7 +233,21 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
         </div>
       )}
 
-      <div className="mt-6 aspect-video w-full rounded-xl bg-muted" />
+      {/* Editorial hero — real image when available (LCP: priority, no lazy),
+          otherwise a restrained placeholder. Responsive variants via sizes. */}
+      {article.cover_image_url || article.translation.og_image_url ? (
+        <Image
+          src={(article.cover_image_url ?? article.translation.og_image_url)!}
+          alt={article.translation.title}
+          width={1280}
+          height={720}
+          priority
+          sizes={HERO_IMAGE_SIZES}
+          className="mt-6 aspect-video w-full rounded-xl object-cover"
+        />
+      ) : (
+        <div className="mt-6 aspect-video w-full rounded-xl bg-muted" />
+      )}
 
       <div className="mt-6 prose prose-sm max-w-none text-foreground">
         <p className="leading-relaxed">{article.translation.content}</p>
@@ -185,14 +271,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
       {marketImpact && (
         <>
-          <MarketImpactCard analysis={marketImpact} isPro={false} label={t("marketImpact")} />
+          <MarketImpactCard analysis={marketImpact} isPro={userIsPro} label={t("marketImpact")} />
           <div className="my-8 flex justify-center">
             <AdSlot placement="between-sections" />
           </div>
         </>
       )}
 
-      {aiAnalysis && <AiAnalysisSection analysis={aiAnalysis as unknown as AiAnalysisPayload} />}
+      {normalizedAiAnalysis && <AiAnalysisSection analysis={normalizedAiAnalysis} isPro={userIsPro} />}
 
       <div className="mt-8">
         <RelatedNews articles={related} locale={locale} label={t("related")} />

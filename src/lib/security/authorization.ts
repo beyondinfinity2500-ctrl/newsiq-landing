@@ -74,6 +74,42 @@ export async function requireSuperAdmin(client: DbClient) {
 }
 
 /**
+ * Server-side check: does the current user have Pro access?
+ *
+ * Returns true when either:
+ *  - The user's profile role is "pro" or higher (editor, admin, super_admin), OR
+ *  - The user has an active subscription with tier = "pro".
+ *
+ * Returns false for unauthenticated visitors. This is a read-only check —
+ * NOT a throw-on-fail guard. Use it to decide whether to expose premium
+ * content server-side before it reaches the client.
+ */
+export async function isProUser(client: DbClient): Promise<boolean> {
+  const user = await getCurrentUser(client);
+  if (!user) return false;
+
+  const { data: rawProfile } = await client
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+  const profile = rawProfile as { role: UserRole } | null;
+  const role = (profile?.role as UserRole) ?? "user";
+
+  if (hasMinRole(role, "pro")) return true;
+
+  const { data: sub } = await client
+    .from("subscriptions")
+    .select("tier, status")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .eq("tier", "pro")
+    .maybeSingle();
+
+  return sub !== null;
+}
+
+/**
  * Client-side UI helper. NOT a security boundary — for display only.
  * Use `requireEditor` / `requireRole` on the server to enforce access.
  */

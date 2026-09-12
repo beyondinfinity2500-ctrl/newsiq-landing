@@ -8,10 +8,13 @@ import {
   unpublishPostAction,
   reviewPostAction,
 } from "@/features/editorial/actions";
+import { generateAISuggestion, saveAISuggestionToDatabase } from "@/features/ai/suggestions";
 import Link from "next/link";
-import { Plus, Pencil, Eye, Send, X, Check, FileText, Archive } from "lucide-react";
+import { Plus, Pencil, Eye, Send, X, Check, FileText, Archive, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAISuggestionForm } from "@/components/admin/suggestion-form";
+import { Input } from "@/components/ui/input";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +25,7 @@ const statusStyles: Record<string, string> = {
   published: "bg-success/15 text-success",
   rejected: "bg-destructive/15 text-destructive",
   archived: "bg-muted text-muted-foreground",
+  suggested: "bg-purple/15 text-purple",
 };
 
 function statusBadgeKey(status: string): string {
@@ -32,6 +36,7 @@ function statusBadgeKey(status: string): string {
     published: "statusPublished",
     rejected: "statusRejected",
     archived: "statusArchived",
+    suggested: "statusSuggested",
   };
   return map[status] ?? "statusDraft";
 }
@@ -70,6 +75,19 @@ export default async function AdminPostsPage({
             {t("posts.addNew")}
           </Button>
         </Link>
+        {/** AI Suggestion button - admin can trigger AI to suggest a story **/}
+        <Button
+          variant="outline"
+          size="icon"
+          className="ml-2"
+          onClick={() => {
+            // Trigger AI suggestion - in a real implementation this would
+            // open a modal or navigate to the suggestion generation
+            window.location.href = `/${locale}/admin/suggestion/generate`;
+          }}
+        >
+          <Sparkles className="size-4" />
+        </Button>
       </div>
 
       {message && (
@@ -77,6 +95,18 @@ export default async function AdminPostsPage({
           {t(`posts.flash.${message}` as never) ?? message}
         </div>
       )}
+
+      {/* AI Suggestion card - shown when there's a suggestion in context */}
+      {posts.some((p) => p.status === "suggested") && (
+        <div className="mb-4 rounded-lg border border-purple/30 bg-purple/5 px-4 py-2 text-sm text-purple">
+          <div className="flex items-center gap-2">
+            <Sparkles className="size-3.5" />
+            <span>{t("posts.aiSuggestionPending")}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Status filter */}
 
       {/* Status filter */}
       <div className="mb-4 flex flex-wrap gap-2">
@@ -100,6 +130,9 @@ export default async function AdminPostsPage({
         </Link>
         <Link href={`/${locale}/admin/posts?status=archived`}>
           <Button variant={status === "archived" ? "default" : "outline"} size="sm">{t("posts.statusArchived")}</Button>
+        </Link>
+        <Link href={`/${locale}/admin/posts?status=suggested`}>
+          <Button variant={status === "suggested" ? "default" : "outline"} size="sm">{t("posts.statusSuggested")}</Button>
         </Link>
       </div>
 
@@ -192,6 +225,35 @@ export default async function AdminPostsPage({
                             <input type="hidden" name="postId" value={post.id} />
                             <Button type="submit" variant="ghost" size="icon" className="size-8 text-warning" aria-label={t("posts.unpublish")}>
                               <Archive className="size-3.5" />
+                            </Button>
+                          </form>
+                        )}
+
+                        {post.status === "suggested" && (
+                          <>
+                            <form action={review}>
+                              <input type="hidden" name="postId" value={post.id} />
+                              <input type="hidden" name="decision" value="approve" />
+                              <Button type="submit" variant="ghost" size="icon" className="size-8 text-info" aria-label={t("posts.acceptSuggestion")}>
+                                <Check className="size-3.5" />
+                              </Button>
+                            </form>
+                            <form action={review}>
+                              <input type="hidden" name="postId" value={post.id} />
+                              <input type="hidden" name="decision" value="reject" />
+                              <Button type="submit" variant="ghost" size="icon" className="size-8 text-destructive" aria-label={t("posts.rejectSuggestion")}>
+                                <X className="size-3.5" />
+                              </Button>
+                            </form>
+                          </>
+                        )}
+
+                        {post.status === "rejected" && (
+                          <form action={review}>
+                            <input type="hidden" name="postId" value={post.id} />
+                            <input type="hidden" name="decision" value="approve" />
+                            <Button type="submit" variant="ghost" size="icon" className="size-8 text-info" aria-label={t("posts.resubmit")}>
+                              <Check className="size-3.5" />
                             </Button>
                           </form>
                         )}

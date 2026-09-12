@@ -48,7 +48,7 @@ export default async function SubscribePage({ params }: { params: Promise<{ loca
     <main className="min-h-screen bg-background text-foreground">
       <div className="page-grid" aria-hidden="true" />
       <section className="relative z-10 mx-auto max-w-6xl px-5 py-16 sm:py-24 lg:px-8">
-        <Breadcrumbs current={t("title")} locale={locale} />
+        <Breadcrumbs current={t("title")} />
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">NEWSiQ / Membership</p>
           <h1 className="mt-3 text-balance text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">{t("title")}</h1>
@@ -78,7 +78,7 @@ export default async function SubscribePage({ params }: { params: Promise<{ loca
                 </ul>
                 <div className="mt-8">
                   <Link
-                    href={`/${locale}/signup?plan=${product.id}`}
+                    href={`/signup?plan=${product.id}`}
                     className="block w-full rounded-md bg-primary px-4 py-3 text-center text-xs font-bold text-primary-foreground transition-transform hover:-translate-y-0.5"
                   >
                     {t("subscribeButton")}

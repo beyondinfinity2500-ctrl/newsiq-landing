@@ -92,7 +92,7 @@ async function loadArticleForAnalysis(
     .select("title, summary, content, locale, translation_status")
     .eq("post_id", postId)
     .eq("locale", originalLocale)
-    .in("translation_status", ["completed", "published"])
+    .in("translation_status", ["published"])
     .maybeSingle();
   const fallbackTr = tr as { title: string; summary: string | null; content: string | null; locale: string; translation_status: string } | null;
 
