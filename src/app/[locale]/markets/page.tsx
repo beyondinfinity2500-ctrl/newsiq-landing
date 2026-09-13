@@ -41,13 +41,19 @@ export default async function MarketsPage({ params }: { params: Promise<{ locale
       <section className="mt-12 rounded-xl border border-warning/30 bg-warning/5 p-6">
         <h2 className="text-lg font-bold text-warning">{t("disclaimerTitle")}</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("disclaimerBody")}</p>
+        <Link
+          href="/terms"
+          className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-warning hover:text-warning/80 transition-colors"
+        >
+          {t("disclaimerLink")}
+        </Link>
       </section>
 
       <section className="mt-12 rounded-xl border border-info/30 bg-info/5 p-6">
         <h2 className="text-lg font-bold text-foreground">{t("ctaTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("ctaBody")}</p>
         <Link
-          href={`/${locale}`}
+          href="/"
           className="mt-4 inline-flex items-center rounded-lg bg-foreground px-4 py-2 text-sm font-semibold text-background transition-colors hover:bg-foreground/90"
         >
           {t("ctaButton")}

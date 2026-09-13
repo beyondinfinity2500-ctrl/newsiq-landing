@@ -54,11 +54,11 @@
     "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
     "availableIn": "Available in"
   ,
-    "marketContext": "AI Market Context",
-    "overallSentiment": "Sentiment",
-    "marketsAffected": "markets affected",
-    "unlockFullAnalysis": "Unlock full analysis",
-    "analysisNotAvailable": "Market impact analysis not available yet for this article."
+    "marketContext": "AI市場コンテキスト",
+    "overallSentiment": "センチメント",
+    "marketsAffected": "影響を受ける市場",
+    "unlockFullAnalysis": "完全な分析を解除",
+    "analysisNotAvailable": "この記事の市場影響分析はまだ利用できません。"
   },
   "search": {
     "title": "検索",
@@ -95,7 +95,7 @@
     "newPassword": "新しいパスワード",
     "passwordHint": "8文字以上で入力してください。",
     "signIn": "ログイン",
-    "continueWithGoogle": "Continue with Google",
+    "continueWithGoogle": "Googleで続ける",
     "signUp": "登録",
     "signOut": "ログアウト",
     "forgotPassword": "パスワードをお忘れですか？",
@@ -479,7 +479,8 @@
     "disclaimerBody": "Market-impact analysis on NewsIQ is AI-generated and editorially reviewed. It is informational, not financial advice. We never say buy, sell, or hold. Markets are uncertain and past performance does not guarantee future results. Always do your own research and consult a licensed professional.",
     "ctaTitle": "See the analysis in action",
     "ctaBody": "Open any story tagged as market-relevant to read the full structured breakdown.",
-    "ctaButton": "Browse news"
+    "ctaButton": "Browse news",
+    "disclaimerLink": "完全な規約を読む →"
   },
   "subscribe": {
     "title": "Subscribe to NewsIQ Pro",

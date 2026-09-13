@@ -17,21 +17,21 @@
     "editorialPolicy": "Política editorial",
     "sourcePolicy": "Política de fontes",
     "category": {
-      "world": "World",
-      "politics": "Politics",
-      "business": "Business",
-      "finance": "Finance",
-      "technology": "Technology",
-      "crypto": "Crypto",
-      "markets": "Markets",
-      "energy": "Energy",
+      "world": "Mundo",
+      "politics": "Política",
+      "business": "Negócios",
+      "finance": "Finanças",
+      "technology": "Tecnologia",
+      "crypto": "Cripto",
+      "markets": "Mercados",
+      "energy": "Energia",
       "commodities": "Commodities",
-      "science": "Science",
-      "health": "Health",
-      "climate": "Climate",
-      "sports": "Sports",
-      "travel": "Travel",
-      "culture": "Culture"
+      "science": "Ciência",
+      "health": "Saúde",
+      "climate": "Clima",
+      "sports": "Esportes",
+      "travel": "Viagem",
+      "culture": "Cultura"
     }
   },
   "home": {
@@ -61,11 +61,11 @@
     "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
     "availableIn": "Available in"
   ,
-    "marketContext": "AI Market Context",
-    "overallSentiment": "Sentiment",
-    "marketsAffected": "markets affected",
-    "unlockFullAnalysis": "Unlock full analysis",
-    "analysisNotAvailable": "Market impact analysis not available yet for this article."
+    "marketContext": "Contexto de mercado IA",
+    "overallSentiment": "Sentimento",
+    "marketsAffected": "mercados afetados",
+    "unlockFullAnalysis": "Desbloquear análise completa",
+    "analysisNotAvailable": "A análise de impacto de mercado ainda não está disponível para este artigo."
   },
   "search": {
     "title": "Pesquisar",
@@ -87,7 +87,7 @@
     "newPassword": "Nova Senha",
     "passwordHint": "Deve ter pelo menos 8 caracteres.",
     "signIn": "Entrar",
-    "continueWithGoogle": "Continue with Google",
+    "continueWithGoogle": "Continuar com o Google",
     "signUp": "Cadastrar",
     "signOut": "Sair",
     "forgotPassword": "Esqueceu a senha?",
@@ -471,7 +471,8 @@
     "disclaimerBody": "Market-impact analysis on NewsIQ is AI-generated and editorially reviewed. It is informational, not financial advice. We never say buy, sell, or hold. Markets are uncertain and past performance does not guarantee future results. Always do your own research and consult a licensed professional.",
     "ctaTitle": "See the analysis in action",
     "ctaBody": "Open any story tagged as market-relevant to read the full structured breakdown.",
-    "ctaButton": "Browse news"
+    "ctaButton": "Browse news",
+    "disclaimerLink": "Leia nossos termos completos →"
   },
   "subscribe": {
     "title": "Subscribe to NewsIQ Pro",

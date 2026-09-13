@@ -59,9 +59,9 @@ export function MarketImpactCard({ analysis, isPro = false, label = "AI Market I
  */
 function LockedPreview({ analysis, creditCost }: { analysis: MarketImpactResult; creditCost: string }) {
   return (
-    <div className="relative">
-      {/* Blurred content teaser — asset names and directions only, no reasoning */}
-      <div className="pointer-events-none select-none p-5 blur-[6px]" aria-hidden="true">
+    <div className="relative min-h-[280px]">
+      {/* Blurred content teaser — recognizable but not readable */}
+      <div className="pointer-events-none select-none p-5 blur-[3px] opacity-60" aria-hidden="true">
         <div className="mb-4 flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
           <span className="text-xs font-medium text-muted-foreground">Overall sentiment:</span>
           <span className="text-sm font-semibold capitalize text-foreground">{analysis.overallSentiment}</span>
@@ -82,21 +82,20 @@ function LockedPreview({ analysis, creditCost }: { analysis: MarketImpactResult;
       </div>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/80 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-card/30" />
 
-      {/* Lock CTA */}
-      <div className="relative z-10 flex flex-col items-center px-5 pb-6 pt-10 text-center">
-        <p className="text-sm font-medium text-foreground mb-1">
-          {analysis.affectedAssets.length} markets affected — full analysis with reasoning, risks, and time horizon
-        </p>
-        <p className="text-xs text-muted-foreground mb-4">{creditCost}</p>
-        <Link
-          href="/subscribe"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-        >
-          <Lock size={14} aria-hidden="true" />
-          Unlock Full Market Impact
-        </Link>
+      {/* Centered CTA floating over blurred content */}
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-5 text-center">
+        <div className="rounded-xl border border-border bg-card/90 px-6 py-5 shadow-lg backdrop-blur-sm">
+          <p className="text-xs text-muted-foreground mb-3">{creditCost}</p>
+          <Link
+            href="/subscribe"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            <Lock size={14} aria-hidden="true" />
+            Unlock full analysis
+          </Link>
+        </div>
       </div>
     </div>
   );

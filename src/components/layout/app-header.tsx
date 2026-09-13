@@ -61,7 +61,6 @@ export function AppHeader() {
   const langRef = useRef<HTMLDivElement>(null)
   const mobileRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
-  const locale = pathname.split('/')[1] || 'en'
 
   const closeAll = useCallback(() => { setMobileOpen(false); setLangOpen(false) }, [])
 
@@ -103,21 +102,21 @@ export function AppHeader() {
 
         {/* ── Desktop nav ── */}
         <nav className="ml-6 hidden items-center gap-0 md:flex" aria-label="Primary navigation">
-          <Link href={`/${locale}`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Home</Link>
-          <Link href={`/${locale}/about`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</Link>
+          <Link href="/" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Home</Link>
+          <Link href="/about" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">About</Link>
 
           <span className="inline-flex items-center gap-0">
             <button type="button" onClick={() => setLive(v => !v)} className="live-toggle" aria-pressed={live} aria-label={live ? 'Pause live updates' : 'Resume live updates'}>
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live' : 'Paused'}
             </button>
-            <Link href={`/${locale}/trending`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href={`/${locale}/markets`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href="/trending" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Trending</Link>
+            <Link href="/markets" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Markets</Link>
           </span>
 
-          <Link href={`/${locale}/terms`} className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
+          <Link href="/terms" className="rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">Terms</Link>
 
-          <Link href={`/${locale}/subscribe`} className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
+          <Link href="/subscribe" className="ml-1.5 shrink-0 rounded-md bg-primary px-3.5 py-1.5 text-[11px] font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_16px_hsl(var(--primary)/.3)]">Subscribe</Link>
         </nav>
 
         {/* ── Right side ── */}
@@ -161,12 +160,12 @@ export function AppHeader() {
               <span className={`live-dot ${live ? '' : 'live-dot-off'}`} />
               {live ? 'Live updates on' : 'Live updates paused'}
             </button>
-            <Link href={`/${locale}`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
-            <Link href={`/${locale}/about`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
-            <Link href={`/${locale}/trending`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
-            <Link href={`/${locale}/markets`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
-            <Link href={`/${locale}/terms`} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
-            <Link href={`/${locale}/subscribe`} onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
+            <Link href="/" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Home</Link>
+            <Link href="/about" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">About</Link>
+            <Link href="/trending" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Trending</Link>
+            <Link href="/markets" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Markets</Link>
+            <Link href="/terms" onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground">Terms</Link>
+            <Link href="/subscribe" onClick={() => setMobileOpen(false)} className="mt-1 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground">Subscribe</Link>
           </div>
         </nav>
       )}

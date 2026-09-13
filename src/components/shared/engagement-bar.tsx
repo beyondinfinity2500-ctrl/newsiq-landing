@@ -71,7 +71,7 @@ export function EngagementBar({ articleId, locale }: { articleId: string; locale
         <span className="relative inline-flex items-center justify-center">
           <Heart
             size={15}
-            className={`transition-all duration-300 ${liked ? "fill-primary text-primary scale-110" : ""}`}
+            className={`transition-all duration-300 ${liked ? "fill-amber-500 text-amber-500 scale-110" : ""}`}
             aria-hidden="true"
           />
           {showParticles && (

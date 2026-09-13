@@ -476,6 +476,7 @@
     "howBody": "A news story is classified and deconstructed by our editorial team. Our AI assistant then proposes a directional analysis: affected markets, direction, strength, time horizon, confidence, and key risks. Every analysis is reviewed by an editor before it goes live.",
     "disclaimerTitle": "Important disclaimer",
     "disclaimerBody": "Market-impact analysis on NewsIQ is AI-generated and editorially reviewed. It is informational, not financial advice. We never say buy, sell, or hold. Markets are uncertain and past performance does not guarantee future results. Always do your own research and consult a licensed professional.",
+    "disclaimerLink": "Read our full terms →",
     "ctaTitle": "See the analysis in action",
     "ctaBody": "Open any story tagged as market-relevant to read the full structured breakdown.",
     "ctaButton": "Browse news"

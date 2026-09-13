@@ -54,11 +54,11 @@
     "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
     "availableIn": "Available in"
   ,
-    "marketContext": "AI Market Context",
-    "overallSentiment": "Sentiment",
-    "marketsAffected": "markets affected",
-    "unlockFullAnalysis": "Unlock full analysis",
-    "analysisNotAvailable": "Market impact analysis not available yet for this article."
+    "marketContext": "AI 시장 맥락",
+    "overallSentiment": "감정",
+    "marketsAffected": "영향을 받는 시장",
+    "unlockFullAnalysis": "전체 분석 잠금 해제",
+    "analysisNotAvailable": "이 기사의 시장 영향 분석은 아직 사용할 수 없습니다."
   },
   "search": {
     "title": "검색",
@@ -95,7 +95,7 @@
     "newPassword": "새 비밀번호",
     "passwordHint": "최소 8자 이상이어야 합니다.",
     "signIn": "로그인",
-    "continueWithGoogle": "Continue with Google",
+    "continueWithGoogle": "Google로 계속",
     "signUp": "회원가입",
     "signOut": "로그아웃",
     "forgotPassword": "비밀번호를 잊으셨나요?",
@@ -479,7 +479,8 @@
     "disclaimerBody": "Market-impact analysis on NewsIQ is AI-generated and editorially reviewed. It is informational, not financial advice. We never say buy, sell, or hold. Markets are uncertain and past performance does not guarantee future results. Always do your own research and consult a licensed professional.",
     "ctaTitle": "See the analysis in action",
     "ctaBody": "Open any story tagged as market-relevant to read the full structured breakdown.",
-    "ctaButton": "Browse news"
+    "ctaButton": "Browse news",
+    "disclaimerLink": "전체 약관 읽기 →"
   },
   "subscribe": {
     "title": "Subscribe to NewsIQ Pro",
