@@ -135,9 +135,9 @@ function MarketStrip() {
         aria-label={`View live markets. ${fullAriaLabel}`}
         className="mx-auto block max-w-7xl px-5 sm:px-8 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
-        {/* Mobile: marquee */}
+        {/* Mobile: marquee — single horizontal track, duplicated for seamless loop */}
         <div className="overflow-hidden sm:hidden">
-          <div style={{ animation: 'ticker-scroll 28s linear infinite' }}>
+          <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 28s linear infinite' }}>
             {tickerContent}
             {tickerContent}
           </div>
@@ -182,7 +182,7 @@ function NewsCard({
       <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/60">
         <span className="text-primary">{article.country ?? 'Global'}</span>
         <span>·</span>
-        <span>{article.category_id}</span>
+        <span>{article.category_name ?? article.category_id}</span>
         <span>·</span>
         <span>{formatRelativeTime(article.published_at, locale)}</span>
         {isBreaking && (
@@ -401,7 +401,7 @@ export default function HomeClient({ locale, initialArticles = [] }: { locale: s
   const visibleNews = useMemo(() => {
     if (filter === 'Live feed') return homepageFeed
     return homepageFeed.filter((item) => {
-      const cat = item.category_id?.toLowerCase()
+      const cat = (item.category_slug ?? item.category_id)?.toLowerCase()
       if (filter === 'Markets') return cat === 'markets' || cat === 'finance'
       if (filter === 'Geopolitics') return cat === 'geopolitics' || cat === 'politics'
       if (filter === 'Technology') return cat === 'technology' || cat === 'crypto'

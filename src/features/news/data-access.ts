@@ -28,6 +28,9 @@ export interface ArticleWithDetails extends Post {
   is_fallback: boolean;
   /** Locale of the translation that was actually returned. */
   resolved_locale: string;
+  /** Human-readable category name and slug, resolved from the categories table. */
+  category_name: string | null;
+  category_slug: string | null;
 }
 
 /**
@@ -38,6 +41,7 @@ export interface ArticleWithDetails extends Post {
  */
 const PUBLIC_TRANSLATION_STATUSES = ["published"] as const;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isPublicTranslation(status: string | null | undefined): boolean {
   if (!status) return false;
   return (PUBLIC_TRANSLATION_STATUSES as readonly string[]).includes(status);
@@ -46,7 +50,9 @@ function isPublicTranslation(status: string | null | undefined): boolean {
 function mapRow(row: Record<string, unknown>, resolvedLocale: string, isFallback: boolean): ArticleWithDetails {
   const translations = row.post_translations as unknown as PostTranslation[];
   const source = row.source as unknown as Source | null;
-  const { post_translations: _pt, source: _s, ...postFields } = row;
+  const category = row.categories as unknown as { name: string; slug: string } | null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { post_translations: _pt, source: _s, categories: _c, ...postFields } = row;
   return {
     ...(postFields as unknown as Post),
     translation: translations[0],
@@ -54,10 +60,12 @@ function mapRow(row: Record<string, unknown>, resolvedLocale: string, isFallback
     source_reliability: source?.credibility_score ?? 0,
     is_fallback: isFallback,
     resolved_locale: resolvedLocale,
+    category_name: category?.name ?? null,
+    category_slug: category?.slug ?? null,
   } as ArticleWithDetails;
 }
 
-const selectFields = "*, post_translations!inner(*), source:source_id(*)";
+const selectFields = "*, post_translations!inner(*), source:source_id(*), categories:category_id(name, slug)";
 
 export async function getPublishedArticles(
   client: DbClient,

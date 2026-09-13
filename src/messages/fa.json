@@ -48,17 +48,23 @@
     "home": "خانه",
     "developing": "در حال توسعه",
     "marketImpact": "تحلیل اثر بازار",
+    "marketContext": "زمینه بازار هوش مصنوعی",
+    "overallSentiment": "احساسات",
+    "marketsAffected": "بازار تحت تأثیر",
+    "unlockFullAnalysis": "باز کردن تحلیل کامل",
+    "analysisNotAvailable": "تحلیل اثر بازار هنوز برای این مقاله موجود نیست.",
     "related": "اخبار مرتبط",
     "eyewitnessNotice": "گزارش شاهد عینی — تأییدنشده",
     "eyewitnessDescription": "این گزارش توسط کاربر ارسال شده و هنوز توسط NewsIQ مستقلاً تأیید نشده است.",
-    "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
-    "availableIn": "Available in"
+    "fallbackNotice": "این مقاله هنوز به {to} ترجمه نشده است. نسخه اصلی {from} نمایش داده می‌شود.",
+    "availableIn": "ترجمه شده به"
   },
   "search": {
     "title": "جست‌وجو",
     "placeholder": "جست‌وجوی خبر، افراد، شرکت‌ها و بازارها...",
     "emptyTitle": "نتیجه‌ای پیدا نشد",
     "emptyDescription": "کلیدواژه یا فیلتر دیگری را امتحان کنید",
+    "resultsFor": "{count, plural, =0 {نتیجه‌ای یافت نشد} one {# نتیجه} other {# نتیجه}} برای \"{query}\"",
     "filter": {
       "all": "همه",
       "news": "اخبار",
@@ -66,8 +72,7 @@
       "companies": "شرکت‌ها",
       "countries": "کشورها",
       "markets": "بازارها"
-    },
-    "resultsFor": "{count, plural, =0 {No results} one {# result} other {# results}} for \"{query}\""
+    }
   },
   "trending": {
     "title": "ترندها"
@@ -89,6 +94,7 @@
     "newPassword": "رمز عبور جدید",
     "passwordHint": "حداقل ۸ کاراکتر.",
     "signIn": "ورود",
+    "continueWithGoogle": "ادامه با گوگل",
     "signUp": "ثبت‌نام",
     "signOut": "خروج",
     "forgotPassword": "رمز عبور را فراموش کرده‌اید؟",
@@ -475,81 +481,98 @@
     "ctaButton": "Browse news"
   },
   "subscribe": {
-    "title": "Subscribe to NewsIQ Pro",
-    "subtitle": "Unlock the full market-impact breakdown for every important story.",
-    "intro": "Free accounts get the news. Pro accounts get the analysis behind it.",
-    "monthly": "Monthly",
-    "yearly": "Yearly",
-    "saveBadge": "Save 20%",
-    "perMonth": "per month",
-    "perYear": "per year",
-    "currency": "USD",
+    "title": "عضویت در NewsIQ Pro",
+    "subtitle": "تحلیل کامل اثر بازار را برای هر خبر مهم باز کنید.",
+    "intro": "حساب رایگان اخبار را می‌بیند. حساب Pro تحلیل پشت آن را باز می‌کند.",
+    "monthly": "ماهانه",
+    "yearly": "سالانه",
+    "saveBadge": "۲۰٪ صرفه‌جویی",
+    "perMonth": "در ماه",
+    "perYear": "در سال",
+    "currency": "دلار",
     "free": {
-      "name": "Free",
-      "price": "0",
-      "period": "forever",
-      "tagline": "Read every story in 15 languages.",
+      "name": "رایگان",
+      "price": "۰",
+      "period": "برای همیشه",
+      "tagline": "هر مقاله را به ۱۵ زبان بخوانید.",
       "features": [
-        "All published news, in every supported language",
-        "Short AI financial preview per article",
-        "Reading history and saved articles",
-        "Email newsletter (weekly digest)"
+        "همه اخبار منتشرشده، به همه زبان‌های پشتیبانی‌شده",
+        "پیش‌نمایش کوتاه هوش مصنوعی برای هر مقاله",
+        "تاریخچه مطالعه و مقالات ذخیره‌شده",
+        "خبرنامه ایمیلی (خلاصه هفتگی)"
       ],
-      "cta": "Create free account"
+      "cta": "ایجاد حساب رایگان"
     },
     "pro": {
       "name": "Pro",
-      "price": "12",
-      "period": "per month",
-      "tagline": "Unlock the full market-impact breakdown.",
+      "price": "۱۲",
+      "period": "در ماه",
+      "tagline": "تحلیل کامل اثر بازار را باز کنید.",
       "features": [
-        "Everything in Free",
-        "Full market-impact analysis (assets, direction, strength, time horizon, confidence)",
-        "Key risks and opportunities per story",
-        "Historical context and related-market connections",
-        "Priority access to new features and languages"
+        "همه چیز در رایگان",
+        "تحلیل کامل اثر بازار (دارایی‌ها، جهت، قدرت، افق زمانی، اطمینان)",
+        "ریسک‌ها و فرصت‌های کلیدی برای هر خبر",
+        "زمینه تاریخی و ارتباط بازارهای مرتبط",
+        "دسترسی اولویت‌دار به ویژگی‌ها و زبان‌های جدید"
       ],
-      "cta": "Upgrade to Pro",
-      "mostPopular": "Most popular"
+      "cta": "ارتقا به Pro",
+      "mostPopular": "محبوب‌ترین"
     },
     "team": {
-      "name": "Team",
-      "price": "Custom",
-      "period": "per month",
-      "tagline": "NewsIQ for your newsroom or financial team.",
+      "name": "تیم",
+      "price": "سفارشی",
+      "period": "در ماه",
+      "tagline": "NewsIQ برای تیم خبری یا مالی شما.",
       "features": [
-        "Everything in Pro",
-        "API access to the market-impact feed",
-        "Slack/Teams alerting on high-impact stories",
-        "Custom source ingestion for your team",
-        "Priority editorial support"
+        "همه چیز در Pro",
+        "دسترسی API به فید اثر بازار",
+        "هشدار Slack/Teams برای اخبار با اثر بالا",
+        "ورود سفارشی منابع برای تیم شما",
+        "پشتیبانی تحریریه اولویت‌دار"
       ],
-      "cta": "Contact sales"
+      "cta": "تماس با فروش"
     },
-    "faqTitle": "Frequently asked questions",
+    "faqTitle": "سوالات متداول",
     "faqs": [
       {
-        "q": "Can I cancel anytime?",
-        "a": "Yes. Monthly and yearly plans can be cancelled from your account page at any time. You keep access until the end of the current billing period."
+        "q": "آیا می‌توانم هر زمان لغو کنم؟",
+        "a": "بله. طرح‌های ماهانه و سالانه را می‌توانید هر زمان از صفحه حساب خود لغو کنید. دسترسی تا پایان دوره صورتحساب فعلی حفظ می‌شود."
       },
       {
-        "q": "Do you offer student discounts?",
-        "a": "Yes. Email press@newsiq.top with a valid academic email and we will send a discount code."
+        "q": "آیا تخفیف دانشجویی ارائه می‌دهید؟",
+        "a": "بله. با ایمیل معتبر دانشگاهی به press@newsiq.top ایمیل بزنید تا کد تخفیف برای شما ارسال شود."
       },
       {
-        "q": "Is my payment information secure?",
-        "a": "Payments are processed by a third-party provider. NewsIQ never sees or stores your card number."
+        "q": "آیا اطلاعات پرداخت من امن است؟",
+        "a": "پرداخت‌ها توسط یک ارائه‌دهنده شخص ثالث پردازش می‌شوند. NewsIQ هرگز شماره کارت شما را نمی‌بیند یا ذخیره نمی‌کند."
       },
       {
-        "q": "What is the difference between Free and Pro?",
-        "a": "Free shows you the news and a short AI preview. Pro unlocks the full structured breakdown: which markets, in which direction, with what strength and time horizon, plus the key risks and opportunities."
+        "q": "تفاوت بین رایگان و Pro چیست؟",
+        "a": "رایگان اخبار و پیش‌نمایش کوتاه هوش مصنوعی را نشان می‌دهد. Pro تحلیل ساختاریافته کامل را باز می‌کند: کدام بازارها، در چه جهتی، با چه قدرت و افق زمانی، به همراه ریسک‌ها و فرصت‌های کلیدی."
       },
       {
-        "q": "Do you offer team or enterprise plans?",
-        "a": "Yes. The Team plan includes API access, alerting, and custom source ingestion. Email advertising@newsiq.top for a quote."
+        "q": "آیا طرح تیم یا سازمانی ارائه می‌دهید؟",
+        "a": "بله. طرح تیم شامل دسترسی API، هشدار و ورود سفارشی منابع است. برای قیمت‌گذاری به advertising@newsiq.top ایمیل بزنید."
       }
     ],
-    "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement.",
-    "subscribeButton": "عضویت"
+    "termsNote": "عضویت‌ها تا لغو، به صورت خودکار تمدید می‌شوند. قیمت‌های نمایش داده شده شامل مالیات‌های قابل اعمال نیستند. شرایط کامل در شرایط استفاده ذکر شده است.",
+    "subscribeButton": "عضویت",
+    "offlinePaymentTitle": "روش‌های پرداخت آفلاین",
+    "offlinePaymentDescription": "ترجیح می‌دهید آفلاین پرداخت کنید؟ ما TNG eWallet و WebMoney را قبول می‌کنیم. پس از عضویت، مراحل زیر را دنبال کنید.",
+    "offlinePaymentNote": "تأیید پرداخت در حال حاضر به صورت دستی انجام می‌شود. پس از ارسال مدرک پرداخت، تیم ما ظرف ۱ تا ۲ روز کاری اعتبار شما را فعال می‌کند.",
+    "offlineWorkflowTitle": "نحوه کار",
+    "offlineStep1": " plan خود را انتخاب کنید و روی عضویت کلیک کنید.",
+    "offlineStep2": "پرداخت را به TNG eWallet یا WebMoney با استفاده از جزئیات ارائه شده پس از ثبت‌نام ارسال کنید.",
+    "offlineStep3": "شناسه تراکنش یا مرجع پرداخت خود را یادداشت کنید.",
+    "offlineStep4": "مدرک پرداخت خود را به support@newsiq.top ایمیل کنید با ایمیل حساب NewsIQ و شناسه تراکنش.",
+    "offlineStep5": "تیم ما پرداخت را به صورت دستی بررسی می‌کند.",
+    "offlineStep6": "پس از تأیید، اعتبارهای AI Analysis به حساب شما اضافه می‌شوند.",
+    "offlineStep7": "ایمیل تأیید دریافت خواهید کرد.",
+    "valueMarketImpact": "تحلیل اثر بازار",
+    "valueMarketImpactDesc": "تفکیک ساختاریافته از بازارهای تحت تأثیر، جهت و قدرت برای هر رویداد خبری مهم.",
+    "valueRealTime": "اطلاعات بلادرنگ",
+    "valueRealTimeDesc": "تحلیل را در لحظه شکسته شدن خبر دریافت کنید، با بینش‌های هوش مصنوعی و بررسی تحریریه.",
+    "valueMultilingual": "۱۵ زبان",
+    "valueMultilingualDesc": "به زبان خود بخوانید. هر داستان به ۱۵ زبان با ترجمه‌های با کیفیت بومی موجود است."
   }
 }

@@ -26,8 +26,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 const PAYMENT_METHODS = [
   { name: "PayPal", className: "checkout-paypal" },
   { name: "VISA", className: "checkout-visa" },
-  { name: "mastercard", className: "checkout-mastercard" },
+  { name: "Mastercard", className: "checkout-mastercard" },
   { name: "Stripe", className: "checkout-stripe" },
+];
+
+const OFFLINE_METHODS = [
+  { name: "TNG eWallet", icon: "💳" },
+  { name: "WebMoney", icon: "🌐" },
 ];
 
 const FAQ_ITEMS: Array<{ q: string; a: string }> = [
@@ -52,15 +57,29 @@ export default async function SubscribePage({ params }: { params: Promise<{ loca
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="page-grid" aria-hidden="true" />
-      <section className="relative z-10 mx-auto max-w-6xl px-5 py-16 sm:py-24 lg:px-8">
+      <section className="relative z-10 mx-auto max-w-7xl px-5 py-16 sm:py-24 lg:px-8">
         <Breadcrumbs current={t("title")} />
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">NEWSiQ / Membership</p>
           <h1 className="mt-3 text-balance text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">{t("title")}</h1>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-sm leading-6 text-muted-foreground sm:text-base">{t("subtitle")}</p>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-4xl gap-5 md:grid-cols-3">
+        <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-3">
+          {[
+            { icon: "📊", titleKey: "valueMarketImpact", descKey: "valueMarketImpactDesc" },
+            { icon: "⚡", titleKey: "valueRealTime", descKey: "valueRealTimeDesc" },
+            { icon: "🌍", titleKey: "valueMultilingual", descKey: "valueMultilingualDesc" },
+          ].map((item) => (
+            <div key={item.titleKey} className="text-center">
+              <span className="text-3xl" aria-hidden="true">{item.icon}</span>
+              <h3 className="mt-3 text-sm font-semibold text-foreground">{t(item.titleKey)}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t(item.descKey)}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-12 grid max-w-5xl gap-5 md:grid-cols-3">
           {PRODUCTS.map((product) => {
             const isFeatured = product.isPremium
             const cardClass = isFeatured
@@ -115,6 +134,45 @@ export default async function SubscribePage({ params }: { params: Promise<{ loca
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
               </details>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 rounded-xl border border-border bg-card/70 p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-foreground">{t("offlinePaymentTitle")}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("offlinePaymentDescription")}</p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {OFFLINE_METHODS.map((method) => (
+              <div key={method.name} className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-4 py-2.5">
+                <span className="text-xl" aria-hidden="true">{method.icon}</span>
+                <span className="text-sm font-medium text-foreground">{method.name}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <h3 className="text-sm font-semibold text-foreground mb-4">{t("offlineWorkflowTitle")}</h3>
+            <ol className="space-y-3">
+              {[
+                t("offlineStep1"),
+                t("offlineStep2"),
+                t("offlineStep3"),
+                t("offlineStep4"),
+                t("offlineStep5"),
+                t("offlineStep6"),
+                t("offlineStep7"),
+              ].map((step, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{i + 1}</span>
+                  <span className="text-muted-foreground leading-relaxed">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="mt-6 flex items-start gap-2 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3">
+            <span className="text-sm" aria-hidden="true">⏳</span>
+            <p className="text-xs leading-relaxed text-muted-foreground">{t("offlinePaymentNote")}</p>
           </div>
         </section>
 

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Clock, MapPin } from "lucide-react";
 import type { ArticleWithDetails } from "@/features/news/data-access";
 import { SourceBadge } from "@/components/shared/source-badge";
 import { VerificationBadge, DevelopingBadge } from "@/components/shared/verification-badge";
@@ -14,7 +13,7 @@ export function NewsCard({ article, locale }: { article: ArticleWithDetails; loc
       <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
         <span className="text-primary">{article.country ?? 'Global'}</span>
         <span>·</span>
-        <span>{article.category_id}</span>
+        <span>{article.category_name ?? article.category_id}</span>
         <span>·</span>
         <span>{formatRelativeTime(article.published_at, locale)}</span>
         {article.importance === 'breaking' && (

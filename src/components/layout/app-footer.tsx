@@ -1,4 +1,7 @@
+"use client"
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const paymentBrands = [
   { name: 'PayPal', className: 'payment-paypal' },
@@ -19,6 +22,9 @@ const marketSymbols = [
 ]
 
 export function AppFooter() {
+  const pathname = usePathname()
+  const locale = pathname?.split('/')?.[1] || 'en'
+
   return (
     <footer className="relative z-10 mx-auto max-w-7xl border-t border-border px-5 py-8 text-xs text-muted-foreground lg:px-8">
       <div className="flex flex-col gap-5">
@@ -28,7 +34,7 @@ export function AppFooter() {
             <span className="sr-only">Indicative market categories, not live quotes:</span>
             {marketSymbols.map(({ mark, label, className }) => (
               <Link
-                href="/markets"
+                href={`/${locale}/markets`}
                 className={`market-symbol ${className ?? ''}`}
                 key={label}
                 title={`View ${label} market data`}
@@ -46,7 +52,7 @@ export function AppFooter() {
           <div className="flex flex-wrap gap-2">
             {paymentBrands.map(({ name, className }) => (
               <Link
-                href="/subscribe"
+                href={`/${locale}/subscribe`}
                 className={`payment-mark ${className}`}
                 key={name}
                 title={`Subscribe with ${name}`}
@@ -65,9 +71,9 @@ export function AppFooter() {
               <span>Independent intelligence for a moving world · © 2026</span>
             </div>
             <nav className="flex gap-4" aria-label="Footer navigation">
-              <Link href="/about" className="hover:text-foreground">About</Link>
-              <Link href="/terms" className="hover:text-foreground">Terms</Link>
-              <Link href="/subscribe" className="hover:text-foreground">Subscribe</Link>
+              <Link href={`/${locale}/about`} className="hover:text-foreground">About</Link>
+              <Link href={`/${locale}/terms`} className="hover:text-foreground">Terms</Link>
+              <Link href={`/${locale}/subscribe`} className="hover:text-foreground">Subscribe</Link>
             </nav>
           </div>
         </div>

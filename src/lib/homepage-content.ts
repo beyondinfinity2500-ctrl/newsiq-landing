@@ -62,6 +62,8 @@ const unMapStory: ArticleWithDetails = {
   source_reliability: 85,
   is_fallback: false,
   resolved_locale: "en",
+  category_name: "World",
+  category_slug: "world",
 };
 
 const iranOilStory: ArticleWithDetails = {
@@ -110,6 +112,8 @@ const iranOilStory: ArticleWithDetails = {
   source_reliability: 90,
   is_fallback: false,
   resolved_locale: "en",
+  category_name: "Geopolitics",
+  category_slug: "geopolitics",
 };
 
 const russiaUkraineStory: ArticleWithDetails = {
@@ -158,6 +162,8 @@ const russiaUkraineStory: ArticleWithDetails = {
   source_reliability: 90,
   is_fallback: false,
   resolved_locale: "en",
+  category_name: "Geopolitics",
+  category_slug: "geopolitics",
 };
 
 const zelenskyDroneStory: ArticleWithDetails = {
@@ -206,6 +212,8 @@ const zelenskyDroneStory: ArticleWithDetails = {
   source_reliability: 85,
   is_fallback: false,
   resolved_locale: "en",
+  category_name: "Geopolitics",
+  category_slug: "geopolitics",
 };
 
 export const homepageBreaking: ArticleWithDetails[] = [iranOilStory, unMapStory];

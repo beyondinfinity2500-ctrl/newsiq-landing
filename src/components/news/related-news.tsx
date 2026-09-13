@@ -19,7 +19,7 @@ export function RelatedNews({ articles, locale, label = "Related News" }: { arti
             className="group rounded-lg border border-border bg-card p-3 transition-all hover:border-foreground/15 hover:shadow-sm"
           >
             <div className="mb-1.5 flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground capitalize">{article.category_id}</span>
+              <span className="text-xs font-medium text-muted-foreground capitalize">{article.category_name ?? article.category_id}</span>
             </div>
             <h3 className="line-clamp-2 text-sm font-medium text-foreground transition-colors group-hover:text-primary">
               {article.translation.title}

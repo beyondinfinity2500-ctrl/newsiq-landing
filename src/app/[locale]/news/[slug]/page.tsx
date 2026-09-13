@@ -24,7 +24,8 @@ import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { AiAnalysisSection, type AiAnalysisPayload } from "@/components/ai/ai-analysis-section";
 import { formatRelativeTime } from "@/lib/utils";
 import { HERO_IMAGE_SIZES } from "@/lib/image/variants";
-import { ChevronRight, Clock, MapPin, Languages } from "lucide-react";
+import { ChevronRight, Clock, MapPin, Languages, TrendingUp, Lock, BarChart3 } from "lucide-react";
+import { ArticleSidebar } from "@/components/news/article-sidebar";
 import type { MarketImpactResult, MarketImpactAsset } from "@/lib/ai/types";
 import { isProUser } from "@/lib/security/authorization";
 
@@ -158,7 +159,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
   });
 
   return (
-    <article className="mx-auto max-w-2xl px-4 py-6 lg:px-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -167,13 +168,23 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
       <nav className="mb-6 flex items-center gap-1 text-xs text-muted-foreground" aria-label="Breadcrumb">
         <Link href={`/${locale}`} className="hover:text-foreground">{t("home")}</Link>
         <ChevronRight size={12} aria-hidden="true" />
-        <Link href={`/${locale}/categories/${article.category_id}`} className="capitalize hover:text-foreground">{article.category_id}</Link>
-        <ChevronRight size={12} aria-hidden="true" />
+        {article.category_name && (
+          <>
+            <Link href={`/${locale}/categories/${article.category_slug ?? article.category_id}`} className="capitalize hover:text-foreground">{article.category_name}</Link>
+            <ChevronRight size={12} aria-hidden="true" />
+          </>
+        )}
         <span className="truncate text-foreground">{article.translation.title}</span>
       </nav>
 
+      <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
+        {/* ── Main content column ── */}
+        <article className="min-w-0">
+
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-info">{article.category_id}</span>
+        {article.category_name && (
+          <span className="text-xs font-semibold uppercase tracking-wider text-info">{article.category_name}</span>
+        )}
         <ImportanceBadge importance={article.importance} />
         {isDeveloping ? <DevelopingBadge label={t("developing")} /> : <VerificationBadge status={article.verification_status} />}
       </div>
@@ -271,18 +282,80 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
       {marketImpact && (
         <>
-          <MarketImpactCard analysis={marketImpact} isPro={userIsPro} label={t("marketImpact")} />
+          {!userIsPro && (
+            <div className="mt-8 rounded-xl border border-info/20 bg-card p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <BarChart3 size={16} className="text-info" aria-hidden="true" />
+                <h2 className="text-sm font-bold text-foreground">{t("marketContext")}</h2>
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                  <Lock size={9} aria-hidden="true" /> Free
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <span className="text-xs text-muted-foreground">{t("overallSentiment")}:</span>
+                <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  marketImpact.overallSentiment === "bullish" ? "bg-success/15 text-success"
+                    : marketImpact.overallSentiment === "bearish" ? "bg-destructive/15 text-destructive"
+                      : "bg-muted text-muted-foreground"
+                }`}>
+                  {marketImpact.overallSentiment}
+                </span>
+              </div>
+              {marketImpact.affectedAssets.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {marketImpact.affectedAssets.map((a) => (
+                    <span key={a.asset} className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/30 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {a.asset}
+                      <span className={`inline-block h-1.5 w-1.5 rounded-full ${
+                        a.direction === "positive" ? "bg-success" : a.direction === "negative" ? "bg-destructive" : "bg-muted-foreground"
+                      }`} />
+                    </span>
+                  ))}
+                </div>
+              )}
+              <Link
+                href={`/${locale}/subscribe`}
+                className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+              >
+                {t("unlockFullAnalysis")} <TrendingUp size={12} aria-hidden="true" />
+              </Link>
+            </div>
+          )}
+
+          {/* ONE premium section: AiAnalysisSection (canonical) or MarketImpactCard (fallback) */}
+          {normalizedAiAnalysis ? (
+            <AiAnalysisSection analysis={normalizedAiAnalysis} isPro={userIsPro} label={t("marketImpact")} />
+          ) : (
+            <MarketImpactCard analysis={marketImpact} isPro={userIsPro} label={t("marketImpact")} />
+          )}
+
           <div className="my-8 flex justify-center">
             <AdSlot placement="between-sections" />
           </div>
         </>
       )}
 
-      {normalizedAiAnalysis && <AiAnalysisSection analysis={normalizedAiAnalysis} isPro={userIsPro} />}
+      {!marketImpact && (
+        <div className="my-8 rounded-xl border border-border bg-card p-5 text-center">
+          <BarChart3 size={20} className="mx-auto mb-2 text-muted-foreground/40" aria-hidden="true" />
+          <p className="text-sm text-muted-foreground">{t("analysisNotAvailable")}</p>
+        </div>
+      )}
 
-      <div className="mt-8">
+        </article>
+
+        {/* ── Sidebar (desktop only) ── */}
+        <div className="hidden lg:block">
+          <div className="sticky top-20">
+            <ArticleSidebar related={related} marketImpact={marketImpact} locale={locale} />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Mobile-only related news (below grid) ── */}
+      <div className="mt-8 lg:hidden">
         <RelatedNews articles={related} locale={locale} label={t("related")} />
       </div>
-    </article>
+    </div>
   );
 }

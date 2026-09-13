@@ -1,23 +1,106 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Heart, MessageCircle, Share2, Bookmark, Flag, Check } from "lucide-react";
+
+function getLikedArticles(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = localStorage.getItem("newsiq_likes");
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function persistLikedArticles(liked: Set<string>) {
+  try {
+    localStorage.setItem("newsiq_likes", JSON.stringify([...liked]));
+  } catch {}
+}
+
+const PARTICLE_COUNT = 8;
+
+function generateParticles() {
+  return Array.from({ length: PARTICLE_COUNT }, (_, i) => {
+    const angle = (i / PARTICLE_COUNT) * 360 + (Math.random() * 30 - 15);
+    const distance = 14 + Math.random() * 10;
+    const size = 2 + Math.random() * 2;
+    const delay = Math.random() * 80;
+    return { angle, distance, size, delay, id: i };
+  });
+}
 
 export function EngagementBar({ articleId, locale }: { articleId: string; locale: string }) {
   const [liked, setLiked] = useState(false);
+  const [particles, setParticles] = useState<ReturnType<typeof generateParticles>>([]);
+  const [showParticles, setShowParticles] = useState(false);
+  const particleKey = useRef(0);
   const [saved, setSaved] = useState(false);
   const [shared, setShared] = useState(false);
   const [showReport, setShowReport] = useState(false);
 
+  useEffect(() => {
+    const likedArticles = getLikedArticles();
+    setLiked(likedArticles.has(articleId));
+  }, [articleId]);
+
+  const toggleLike = useCallback(() => {
+    const next = !liked;
+    setLiked(next);
+    if (next) {
+      particleKey.current += 1;
+      setParticles(generateParticles());
+      setShowParticles(true);
+      setTimeout(() => setShowParticles(false), 550);
+    }
+    const likedArticles = getLikedArticles();
+    if (next) likedArticles.add(articleId);
+    else likedArticles.delete(articleId);
+    persistLikedArticles(likedArticles);
+  }, [liked, articleId]);
+
   return (
     <div className="flex items-center gap-1">
       <button
-        onClick={() => setLiked(!liked)}
+        onClick={toggleLike}
         className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         aria-label={liked ? "Unlike" : "Like"}
         aria-pressed={liked}
       >
-        <Heart size={15} className={liked ? "fill-destructive text-destructive" : ""} aria-hidden="true" />
+        <span className="relative inline-flex items-center justify-center">
+          <Heart
+            size={15}
+            className={`transition-all duration-300 ${liked ? "fill-primary text-primary scale-110" : ""}`}
+            aria-hidden="true"
+          />
+          {showParticles && (
+            <span className="pointer-events-none absolute inset-0" aria-hidden="true">
+              {particles.map((p) => {
+                const rad = (p.angle * Math.PI) / 180;
+                const tx = Math.cos(rad) * p.distance;
+                const ty = Math.sin(rad) * p.distance;
+                return (
+                  <span
+                    key={`${particleKey.current}-${p.id}`}
+                    className="like-particle"
+                    style={{
+                      width: p.size,
+                      height: p.size,
+                      left: "50%",
+                      top: "50%",
+                      marginLeft: -p.size / 2,
+                      marginTop: -p.size / 2,
+                      "--tx": `${tx}px`,
+                      "--ty": `${ty}px`,
+                      animationDelay: `${p.delay}ms`,
+                    } as React.CSSProperties}
+                  />
+                );
+              })}
+            </span>
+          )}
+        </span>
       </button>
 
       <button

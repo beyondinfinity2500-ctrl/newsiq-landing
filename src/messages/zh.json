@@ -53,6 +53,12 @@
     "eyewitnessDescription": "这是用户提交的报告，NewsIQ 尚未独立核实。",
     "fallbackNotice": "This article has not yet been translated into {to}. Showing the {from} original.",
     "availableIn": "Available in"
+  ,
+    "marketContext": "AI Market Context",
+    "overallSentiment": "Sentiment",
+    "marketsAffected": "markets affected",
+    "unlockFullAnalysis": "Unlock full analysis",
+    "analysisNotAvailable": "Market impact analysis not available yet for this article."
   },
   "search": {
     "title": "搜索",
@@ -89,6 +95,7 @@
     "newPassword": "新密码",
     "passwordHint": "至少8个字符。",
     "signIn": "登录",
+    "continueWithGoogle": "Continue with Google",
     "signUp": "注册",
     "signOut": "退出登录",
     "forgotPassword": "忘记密码？",
@@ -551,5 +558,23 @@
     ],
     "termsNote": "Subscriptions renew automatically until cancelled. Prices shown do not include applicable taxes. See the Terms of Service for the full agreement.",
     "subscribeButton": "订阅"
+  ,
+    "offlinePaymentTitle": "Offline Payment Methods",
+    "offlinePaymentDescription": "Prefer to pay offline? We accept TNG eWallet and WebMoney. After subscribing, follow the steps below to complete your payment.",
+    "offlinePaymentNote": "Payment verification is currently handled manually. After you submit proof, our team will review and activate your credits within 1-2 business days.",
+    "offlineWorkflowTitle": "How it works",
+    "offlineStep1": "Select your plan above and click Subscribe.",
+    "offlineStep2": "Send the payment to TNG eWallet or WebMoney using the details provided after signup.",
+    "offlineStep3": "Note the transaction or reference ID from your payment.",
+    "offlineStep4": "Email your proof of payment to support@newsiq.top with your NEWSiQ account email and the transaction ID.",
+    "offlineStep5": "Our team verifies the payment manually.",
+    "offlineStep6": "Once confirmed, your AI Analysis credits are added to your account.",
+    "offlineStep7": "You will receive a confirmation email.",
+    "valueMarketImpact": "Market Impact Analysis",
+    "valueMarketImpactDesc": "Structured breakdown of which markets are affected, direction, and strength for every major news event.",
+    "valueRealTime": "Real-Time Intelligence",
+    "valueRealTimeDesc": "Get analysis the moment news breaks, with AI-generated insights and editorial review.",
+    "valueMultilingual": "15 Languages",
+    "valueMultilingualDesc": "Read in your language. Every story is available in 15 locales with native-quality translations."
   }
 }
